@@ -1,0 +1,14 @@
+---
+
+- ansible.builtin.import_playbook: converge-pre.yml
+
+- name: Converge
+  hosts: all
+  become: "no"
+  vars:
+    awx_command: /usr/local/bin/awx
+    awx_config_path: /tmp/awx-config
+  tasks:
+    - name: Include role 'ansible-role-awx_casc'
+      ansible.builtin.include_role:
+        name: ansible-role-awx_casc

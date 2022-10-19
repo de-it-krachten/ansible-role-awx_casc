@@ -1,0 +1,25 @@
+---
+
+- hosts: all
+  tasks:
+    - name: Install awxkit
+      pip:
+        name: awxkit
+        version: 15.0.1
+      become: yes
+
+- hosts: localhost
+  vars:
+    awx_config_path: /tmp/awx-config
+  tasks:
+    - name: Create export directory
+      file:
+        path: "{{ awx_config_path }}"
+        state: directory
+        mode: "0700"
+
+    - name: Copy export files
+      copy:
+        src: tests/awx/
+        dest: "{{ awx_config_path }}"
+        remote_src: yes

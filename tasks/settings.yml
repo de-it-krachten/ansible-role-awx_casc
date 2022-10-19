@@ -2,13 +2,13 @@
 
 - name: Settings - retrieve current settings
   ansible.builtin.command: >-
-    {{ venv_awx }} settings list
+    {{ awx_command }} settings list
   environment:
-    TOWER_HOST: "{{ tower_awx[awx_type][awx_env]['url'] }}"
-    TOWER_USERNAME: "{{ tower_awx[awx_type][awx_env]['api_user'] if awx_token is undefined else omit }}"
-    TOWER_PASSWORD: "{{ tower_awx[awx_type][awx_env]['api_password'] if awx_token is undefined else omit }}"
+    TOWER_HOST: "{{ awx_url }}"
+    TOWER_USERNAME: "{{ awx_username if awx_token is undefined else omit }}"
+    TOWER_PASSWORD: "{{ awx_password if awx_token is undefined else omit }}"
     TOWER_OAUTH_TOKEN: "{{ awx_token | default(omit) }}"
-    TOWER_VERIFY_SSL: "{{ tower_awx[awx_type][awx_env]['validate_certs'] }}"
+    TOWER_VERIFY_SSL: "{{ awx_verify_ssl }}"
   changed_when: false
   check_mode: false
   register: _awx_settings
@@ -26,11 +26,11 @@
 
 - name: Settings - update all settings from import
   awx.awx.settings:
-    controller_host: "{{ tower_awx[awx_type][awx_env]['url'] }}"
-    controller_username: "{{ tower_awx[awx_type][awx_env]['api_user'] if awx_token is undefined else omit }}"
-    controller_password: "{{ tower_awx[awx_type][awx_env]['api_password'] if awx_token is undefined else omit }}"
+    controller_host: "{{ awx_url }}"
+    controller_username: "{{ awx_username if awx_token is undefined else omit }}"
+    controller_password: "{{ awx_password if awx_token is undefined else omit }}"
     controller_oauthtoken: "{{ awx_token | default(omit) }}"
-    validate_certs: "{{ tower_awx[awx_type][awx_env]['validate_certs'] }}"
+    validate_certs: "{{ awx_verify_ssl }}"
     name: "{{ item.key }}"
     value: >-
       {{ item.value | regex_replace('slmgtams(1038|1080)', 'awx') }}
@@ -39,7 +39,7 @@
     - item.key in keys_present
     - item.key is not search('(AUTH_LDAP_\\d|SOCIAL|AUTH_LDAP_BIND_PASSWORD)')
     - item.value != None
-    - item.value != ""
+    - item.value | type_debug is search('(bool|int|float)') or item.value | length > 0
     - (settings_present[item.key] is undefined or item.value != settings_present[item.key])
   # failed_when: false
   loop: "{{ settings_required }}"
@@ -49,10 +49,11 @@
 
 - name: Setting - set LDAP bind password
   awx.awx.settings:
-    controller_host: "{{ tower_awx[awx_type][awx_env]['url'] }}"
-    controller_username: "{{ tower_awx[awx_type][awx_env]['api_user'] if awx_token is undefined else omit }}"
-    controller_password: "{{ tower_awx[awx_type][awx_env]['api_password'] if awx_token is undefined else omit }}"
+    controller_host: "{{ awx_url }}"
+    controller_username: "{{ awx_username if awx_token is undefined else omit }}"
+    controller_password: "{{ awx_password if awx_token is undefined else omit }}"
     controller_oauthtoken: "{{ awx_token | default(omit) }}"
-    validate_certs: "{{ tower_awx[awx_type][awx_env]['validate_certs'] }}"
+    validate_certs: "{{ awx_verify_ssl }}"
     name: AUTH_LDAP_BIND_PASSWORD
-    value: "{{ tower_awx[awx_type][awx_env]['ldap_password'] }}"
+    value: "{{ awx_ldap_password }}"
+  when: awx_ldap_password is defined
