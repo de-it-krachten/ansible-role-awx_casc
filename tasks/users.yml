@@ -1,0 +1,28 @@
+---
+
+- name: Create AWX users
+  awx.awx.user:
+    controller_host: "{{ tower_awx[awx_type][awx_env]['url'] }}"
+    controller_username: "{{ tower_awx[awx_type][awx_env]['api_user'] if awx_token is undefined else omit }}"
+    controller_password: "{{ tower_awx[awx_type][awx_env]['api_password'] if awx_token is undefined else omit }}"
+    controller_oauthtoken: "{{ awx_token | default(omit) }}"
+    validate_certs: "{{ tower_awx[awx_type][awx_env]['validate_certs'] }}"
+
+    name: "{{ item.name }}"
+    state: "{{ item.state | default(omit) }}"
+    organization: "{{ item.organization }}"
+
+    email: "{{ item.email | default(omit) }}"
+    first_name: "{{ item.first_name | default(omit) }}"
+    is_superuser: "{{ item.is_superuser | default(omit) }}"
+    is_system_auditor: "{{ item.is_system_auditor | default(omit) }}"
+    last_name: "{{ item.last_name | default(omit) }}"
+    password: "{{ item.password | default(omit) }}"
+    update_secrets: "{{ item.update_secrets | default(omit) }}"
+
+
+  # ignore_errors: yes
+  loop: "{{ lookup('file', awx_config_path + '/users/users.yml') | from_yaml }}"
+  loop_control:
+    label:
+      - "{{ item.name }}"

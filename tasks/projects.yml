@@ -1,0 +1,32 @@
+---
+
+- name: Create AWX project  # noqa ignore-errors
+  awx.awx.project:
+    controller_host: "{{ tower_awx[awx_type][awx_env]['url'] }}"
+    controller_username: "{{ tower_awx[awx_type][awx_env]['api_user'] if awx_token is undefined else omit }}"
+    controller_password: "{{ tower_awx[awx_type][awx_env]['api_password'] if awx_token is undefined else omit }}"
+    controller_oauthtoken: "{{ awx_token | default(omit) }}"
+    validate_certs: "{{ tower_awx[awx_type][awx_env]['validate_certs'] }}"
+
+    name: "{{ item.name }}"
+    organization: "{{ item.organization }}"
+    allow_override: "{{ item.allow_override }}"
+    credential: "{{ item.credential if item.credential != None else omit }}"
+    custom_virtualenv: "{{ item.custom_virtualenv if item.custom_virtualenv != None else omit }}"
+    description: "{{ item.description }}"
+    scm_branch: "{{ item.scm_branch }}"
+    scm_clean: "{{ item.scm_clean }}"
+    scm_delete_on_update: "{{ item.scm_delete_on_update }}"
+    scm_refspec: "{{ item.scm_refspec }}"
+    scm_type: "{{ item.scm_type }}"
+    scm_update_cache_timeout: "{{ item.scm_update_cache_timeout }}"
+    scm_update_on_launch: "{{ item.scm_update_on_launch }}"
+    scm_url: "{{ item.scm_url }}"
+    timeout: "{{ item.timeout }}"
+    update_project: "{{ item.update_project }}"
+    wait: yes
+  # ignore_errors: yes
+  loop: "{{ lookup('file', awx_config_path + '/projects/projects.yml') | from_yaml }}"
+  loop_control:
+    label:
+      - "{{ item.name }}"

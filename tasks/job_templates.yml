@@ -1,0 +1,71 @@
+---
+
+- name: Get all variables file
+  ansible.builtin.set_fact:
+    job_template_var_files: "{{ lookup('fileglob', awx_config_path + '/job_templates/extra_vars/*.json', wantlist=True) }}"
+
+- name: Create AWX job templates  # noqa ignore-errors jinja[spacing]
+  awx.awx.job_template:
+    controller_host: "{{ tower_awx[awx_type][awx_env]['url'] }}"
+    controller_username: "{{ tower_awx[awx_type][awx_env]['api_user'] if awx_token is undefined else omit }}"
+    controller_password: "{{ tower_awx[awx_type][awx_env]['api_password'] if awx_token is undefined else omit }}"
+    controller_oauthtoken: "{{ awx_token | default(omit) }}"
+    validate_certs: "{{ tower_awx[awx_type][awx_env]['validate_certs'] }}"
+
+    name: "{{ item.name }}"
+    organization: "{{ item.organization }}"
+    inventory: "{{ item.inventory }}"
+    project: "{{ item.project }}"
+
+#    allow_simultaneous: "{{ item.allow_simultaneous }}"
+#    ask_credential_on_launch: "{{ item.ask_credential_on_launch }}"
+#    ask_diff_mode_on_launch: "{{ item.ask_diff_mode_on_launch }}"
+#    ask_inventory_on_launch: "{{ item.ask_inventory_on_launch }}"
+#    ask_job_type_on_launch: "{{ item.ask_job_type_on_launch }}"
+#    ask_limit_on_launch: "{{ item.ask_limit_on_launch }}"
+#    ask_scm_branch_on_launch: "{{ item.ask_scm_branch_on_launch }}"
+#    ask_skip_tags_on_launch: "{{ item.ask_skip_tags_on_launch }}"
+#    ask_tags_on_launch: "{{ item.ask_tags_on_launch }}"
+#    ask_variables_on_launch: "{{ item.ask_variables_on_launch }}"
+#    ask_verbosity_on_launch: "{{ item.ask_verbosity_on_launch }}"
+#    become_enabled: "{{ item.become_enabled }}"
+#    credentials: "{{ item.credentials }}"
+#    custom_virtualenv: "{{ item.custom_virtualenv }}"
+#    description: "{{ item.description }}"
+#    diff_mode: "{{ item.diff_mode }}"
+#    extra_vars: >-
+#      {% set varsfile = awx_config_path + '/job_templates/extra_vars/' + item.name + '.json' %}
+#      {%- if job_template_var_files is search('/' + item.name + '.json') -%}
+#      {{ lookup('file', varsfile) }}
+#      {%- else -%}
+#      {}
+#      {%- endif -%}
+#    force_handlers: "{{ item.force_handlers }}"
+#    forks: "{{ item.forks }}"
+#    host_config_key: "{{ item.host_config_key }}"
+#    inventory: "{{ item.inventory }}"
+#    job_slice_count: "{{ item.job_slice_count }}"
+#    job_tags: "{{ item.job_tags }}"
+#    job_type: "{{ item.job_type }}"
+#    limit: "{{ item.limit }}"
+#    playbook: "{{ item.playbook }}"
+#    project: "{{ item.project }}"
+#    scm_branch: "{{ item.scm_branch }}"
+#    skip_tags: "{{ item.skip_tags }}"
+#    start_at_task: "{{ item.start_at_task }}"
+#    survey_enabled: "{{ item.survey_enabled }}"
+#    survey_spec: "{{ item.survey_spec }}"
+#    timeout: "{{ item.timeout }}"
+#    use_fact_cache: "{{ item.use_fact_cache }}"
+#    verbosity: "{{ item.verbosity }}"
+
+  # ignore_errors: yes
+  loop: "{{ lookup('file', awx_config_path + '/job_templates/job_templates.yml') | from_yaml }}"
+  loop_control:
+    label:
+      - "{{ item.name }}"
+  vars:
+    ansible_python_interpreter: "{{ venv_python }}"
+  when:
+    - item.inventory != None
+    - item.project != None

@@ -1,0 +1,19 @@
+---
+
+- name: Create AWX organizations  # noqa ignore-errors
+  awx.awx.organization:
+    controller_host: "{{ tower_awx[awx_type][awx_env]['url'] }}"
+    controller_username: "{{ tower_awx[awx_type][awx_env]['api_user'] if awx_token is undefined else omit }}"
+    controller_password: "{{ tower_awx[awx_type][awx_env]['api_password'] if awx_token is undefined else omit }}"
+    controller_oauthtoken: "{{ awx_token | default(omit) }}"
+    validate_certs: "{{ tower_awx[awx_type][awx_env]['validate_certs'] }}"
+
+    name: "{{ item.name }}"
+    description: "{{ item.description }}"
+    custom_virtualenv: "{{ item.custom_virtualenv | default(omit) }}"
+
+  # ignore_errors: yes
+  loop: "{{ lookup('file', awx_config_path + '/organizations/organizations.yml') | from_yaml }}"
+  loop_control:
+    label:
+      - "{{ item.name }}"
