@@ -66,15 +66,16 @@ awx_verify_ssl: false
 # List of resources to export
 awx_casc_resources:
   - settings
+  - organizations
   - credential_types
   - credentials
   # - execution_environments
   - inventory
   - inventory_sources
+  - projects
   - job_templates
   - notification_templates
   - organizations
-  - projects
   - teams
   - users
   - workflow_job_templates

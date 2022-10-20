@@ -23,8 +23,8 @@
     scm_update_on_launch: "{{ item.scm_update_on_launch }}"
     scm_url: "{{ item.scm_url }}"
     timeout: "{{ item.timeout }}"
-    update_project: "{{ item.update_project }}"
-    wait: yes
+    update_project: "{{ item.update_project | default(True) }}"
+    wait: "{{ item.wait | default(True) }}"
   # ignore_errors: yes
   loop: "{{ lookup('file', awx_config_path + '/projects/projects.yml') | from_yaml }}"
   loop_control:
