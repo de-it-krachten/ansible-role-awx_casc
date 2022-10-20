@@ -1,19 +1,22 @@
 ---
 
-- name: Show settings
-  ansible.builtin.debug:
-    msg:
-      awx_type: "{{ awx_type }}"
-      awx_env: "{{ awx_env }}"
-      awx_url: "{{ tower_awx[awx_type][awx_env]['url'] }}"
+- name: Set different python interpreter for AWX/Tower
+  ansible.builtin.set_fact:
+    ansible_python_interpreter: "{{ awx_python_interpreter }}"
+  when: awx_python_interpreter is defined
 
-- name: Retrieve Oauth2 token
+- name: Asserts
+  ansible.builtin.assert:
+    that:
+      - awx_config_path is defined
+
+- name: Obtain token
   ansible.builtin.include_tasks:
     file: token.yml
 
 - name: Include import of all resources
   ansible.builtin.include_tasks:
     file: "{{ awx_resource }}.yml"
-  loop: "{{ awx_resources_import }}"
+  loop: "{{ awx_casc_resources }}"
   loop_control:
     loop_var: awx_resource

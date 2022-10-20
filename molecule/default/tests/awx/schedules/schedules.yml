@@ -1,0 +1,22 @@
+---
+
+- description: Cleans out expired browser sessions
+  inventory: ''
+  name: Cleanup Expired Sessions
+  rrule: DTSTART:20220530T162653Z RRULE:FREQ=WEEKLY;INTERVAL=1;COUNT=1
+  unified_job_template: Cleanup Expired Sessions
+- description: Removes expired OAuth 2 access and refresh tokens
+  inventory: ''
+  name: Cleanup Expired OAuth 2 Tokens
+  rrule: DTSTART:20220530T162653Z RRULE:FREQ=WEEKLY;INTERVAL=1;COUNT=1
+  unified_job_template: Cleanup Expired OAuth 2 Tokens
+- description: Automatically Generated Schedule
+  inventory: ''
+  name: Cleanup Activity Schedule
+  rrule: DTSTART:20220530T162558Z RRULE:FREQ=WEEKLY;INTERVAL=1;BYDAY=TU
+  unified_job_template: Cleanup Activity Stream
+- description: Automatically Generated Schedule
+  inventory: ''
+  name: Cleanup Job Schedule
+  rrule: DTSTART:20220530T162558Z RRULE:FREQ=WEEKLY;INTERVAL=1;BYDAY=SU
+  unified_job_template: Cleanup Job Details
