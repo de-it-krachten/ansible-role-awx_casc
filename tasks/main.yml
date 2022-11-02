@@ -16,7 +16,9 @@
 
 - name: Include import of all resources
   ansible.builtin.include_tasks:
-    file: "{{ awx_resource }}.yml"
+    file: "{{ awx_resource.name | default(awx_resource) }}.yml"
+  vars:
+    ignore_errors: "{{ awx_resource.ignore_errors | default(False) }}"
   loop: "{{ awx_casc_resources }}"
   loop_control:
     loop_var: awx_resource
