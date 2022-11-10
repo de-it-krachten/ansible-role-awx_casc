@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/de-it-krachten/ansible-role-awx_casc/compare/v1.0.2...v1.0.3) (2022-11-10)
+
+
+### Bug Fixes
+
+* Ignoring errors on 'projects' & 'job_templates' ([d1920fd](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/d1920fd1ef2dfd011e642d9a82a9c02b8450049f))
+
 ## [1.0.2](https://github.com/de-it-krachten/ansible-role-awx_casc/compare/v1.0.1...v1.0.2) (2022-10-24)
 
 
