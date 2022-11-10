@@ -33,8 +33,8 @@ awx_casc_resources:
   # - execution_environments
   - inventory
   - inventory_sources
-  - projects
-  - job_templates
+  - { name: projects, ignore_errors: true }
+  - { name: job_templates, ignore_errors: true }
   - notification_templates
   - organizations
   - teams

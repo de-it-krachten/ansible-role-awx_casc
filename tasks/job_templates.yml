@@ -57,7 +57,7 @@
     use_fact_cache: "{{ item.use_fact_cache }}"
     verbosity: "{{ item.verbosity }}"
 
-  # ignore_errors: yes
+  ignore_errors: "{{ ignore_errors | default(False) }}"
   loop: "{{ lookup('file', awx_config_path + '/job_templates/job_templates.yml') | from_yaml }}"
   loop_control:
     label:

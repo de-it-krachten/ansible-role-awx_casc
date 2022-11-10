@@ -25,7 +25,7 @@
     timeout: "{{ item.timeout }}"
     update_project: "{{ item.update_project | default(True) }}"
     wait: "{{ item.wait | default(True) }}"
-  # ignore_errors: yes
+  ignore_errors: "{{ ignore_errors | default(False) }}"
   loop: "{{ lookup('file', awx_config_path + '/projects/projects.yml') | from_yaml }}"
   loop_control:
     label:
