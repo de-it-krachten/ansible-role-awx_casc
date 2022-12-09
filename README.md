@@ -14,7 +14,6 @@ None
 
 #### Collections
 - community.general
-- community.general
 - awx.awx
 
 ## Platforms
@@ -48,6 +47,15 @@ awx_command: awx
 # Host to execute code from
 awx_execution_host: localhost
 
+# Should creation of AWX hosts be created
+awx_create_hosts: true
+
+# Check if hosts exist in DNS
+awx_host_dns_check: false
+
+# List of hosts that no longer exists (dynamically created)
+awx_hosts_non_existing: []
+
 # AWX url
 awx_url: https://127.0.0.1
 
@@ -72,8 +80,8 @@ awx_casc_resources:
   # - execution_environments
   - inventory
   - inventory_sources
-  - projects
-  - job_templates
+  - { name: projects, ignore_errors: true }
+  - { name: job_templates, ignore_errors: true }
   - notification_templates
   - organizations
   - teams
@@ -83,8 +91,8 @@ awx_casc_resources:
   - schedules
   # - applications  ## not yet
   # - system_job_templates  ## not yet
-  - groups
   - hosts
+  - groups
 </pre></code>
 
 
@@ -93,7 +101,8 @@ awx_casc_resources:
 ## Example Playbook
 ### molecule/default/converge.yml
 <pre><code>
-- ansible.builtin.import_playbook: converge-pre.yml
+- name: sample playbook for role 'awx_casc' pre playbook
+  ansible.builtin.import_playbook: converge-pre.yml
 
 - name: sample playbook for role 'awx_casc'
   hosts: all
