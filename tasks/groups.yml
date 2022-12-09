@@ -14,8 +14,8 @@
 
     name: "{{ item.name }}"
     inventory: "{{ item.inventory }}"
-    hosts: "{{ item.hosts | default(omit) }}"
-    children: "{{ item.children | default(omit) }}"
+    hosts: "{{ item.hosts | default([]) | difference(hosts_non_existing) }}"
+    children: "{{ item.children | default([]) }}"
     variables: >-
       {% set varsfile = awx_config_path + '/groups/variables/' + item.name + '.json' %}
       {%- if group_var_files is search('/' + item.name + '.json') -%}
