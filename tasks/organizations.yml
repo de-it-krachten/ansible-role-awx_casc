@@ -10,7 +10,18 @@
 
     name: "{{ item.name }}"
     description: "{{ item.description }}"
+    galaxy_credentials: "{{ item.galaxy_credentials | default('Ansible Galaxy') }}"
+
     custom_virtualenv: "{{ item.custom_virtualenv | default(omit) }}"
+    default_environment: "{{ item.default_environment | default(omit) }}"
+    # galaxy_credentials: "{{ item.galaxy_credentials | default(omit) }}"
+    instance_groups: "{{ item.instance_groups | default(omit) }}"
+    max_hosts: "{{ item.max_hosts | default(omit) }}"
+    notification_templates_approvals: "{{ item.notification_templates_approvals | default(omit) }}"
+    notification_templates_error: "{{ item.notification_templates_error | default(omit) }}"
+    notification_templates_started: "{{ item.notification_templates_started | default(omit) }}"
+    notification_templates_success: "{{ item.notification_templates_success | default(omit) }}"
+    state: "{{ item.state | default(omit) }}"
 
   # ignore_errors: yes
   loop: "{{ lookup('file', awx_config_path + '/organizations/organizations.yml') | from_yaml }}"
