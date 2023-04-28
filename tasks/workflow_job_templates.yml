@@ -1,27 +1,34 @@
 ---
 
-- name: Create AWX schedules
+- name: Create AWX workflow_job_template
   awx.awx.workflow_job_template:
+
+    # AWX connection & authentication
+    controller_config_file: "{{ awx_config_file | default(omit) }}"
     controller_host: "{{ awx_url }}"
     controller_username: "{{ awx_username if awx_token is undefined else omit }}"
     controller_password: "{{ awx_password if awx_token is undefined else omit }}"
     controller_oauthtoken: "{{ awx_token | default(omit) }}"
     validate_certs: "{{ awx_verify_ssl }}"
 
+    # Required parameters
     name: "{{ item.name }}"
-    state: "{{ item.state | default(omit) }}"
-    organization: "{{ item.organization }}"
-    description: "{{ item.description | default(omit) }}"
 
+    # Optional parameters
     allow_simultaneous: "{{ item.allow_simultaneous | default(omit) }}"
     ask_inventory_on_launch: "{{ item.ask_inventory_on_launch | default(omit) }}"
+    ask_labels_on_launch: "{{ item.ask_labels_on_launch | default(omit) }}"
     ask_limit_on_launch: "{{ item.ask_limit_on_launch | default(omit) }}"
     ask_scm_branch_on_launch: "{{ item.ask_scm_branch_on_launch | default(omit) }}"
+    ask_skip_tags_on_launch: "{{ item.ask_skip_tags_on_launch | default(omit) }}"
+    ask_tags_on_launch: "{{ item.ask_tags_on_launch | default(omit) }}"
     ask_variables_on_launch: "{{ item.ask_variables_on_launch | default(omit) }}"
     copy_from: "{{ item.copy_from | default(omit) }}"
-    destroy_current_schema: "{{ item.destroy_current_schema | default(omit) }}"
-    extra_vars: "{{ item.extra_vars | default(omit) }}"
+    description: "{{ item.description | default(omit) }}"
+    destroy_current_nodes: "{{ item.destroy_current_nodes | default(omit) }}"
+    extra_vars: "{{ lookup('file', awx_config_path + '/workflow_job_templates/extra_vars/' + item.name + '.json', errors='ignore') | default({}, True) }}"
     inventory: "{{ item.inventory | default(omit) }}"
+    job_tags: "{{ item.job_tags | default(omit) }}"
     labels: "{{ item.labels | default(omit) }}"
     limit: "{{ item.limit | default(omit) }}"
     new_name: "{{ item.new_name | default(omit) }}"
@@ -29,14 +36,17 @@
     notification_templates_error: "{{ item.notification_templates_error | default(omit) }}"
     notification_templates_started: "{{ item.notification_templates_started | default(omit) }}"
     notification_templates_success: "{{ item.notification_templates_success | default(omit) }}"
-    schema: "{{ item.schema | default(omit) }}"
+    organization: "{{ item.organization | default(omit) }}"
     scm_branch: "{{ item.scm_branch | default(omit) }}"
+    skip_tags: "{{ item.skip_tags | default(omit) }}"
+    state: "{{ item.state | default(omit) }}"
     survey_enabled: "{{ item.survey_enabled | default(omit) }}"
     survey_spec: "{{ item.survey_spec | default(omit) }}"
     webhook_credential: "{{ item.webhook_credential | default(omit) }}"
     webhook_service: "{{ item.webhook_service | default(omit) }}"
+    workflow_nodes: "{{ item.workflow_nodes | default(omit) }}"
 
-  # ignore_errors: yes
+  ignore_errors: "{{ ignore_errors | default(False) }}"  # noqa ignore-errors
   loop: "{{ lookup('file', awx_config_path + '/workflow_job_templates/workflow_job_templates.yml') | from_yaml }}"
   loop_control:
     label:

@@ -1,3 +1,6 @@
 ---
 
-[]
+- name: inventory1
+  organization: organization1
+- name: inventory2
+  organization: organization2

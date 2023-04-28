@@ -1,3 +1,14 @@
 ---
 
-[]
+- name: group1
+  inventory: inventory1
+  hosts:
+    - host1
+- name: group2
+  inventory: inventory2
+  hosts:
+    - host2
+- name: group3
+  inventory: inventory1
+  children:
+    - group1
