@@ -25,8 +25,10 @@ Supported platforms
 - RockyLinux 8<sup>1</sup>
 - RockyLinux 9<sup>1</sup>
 - OracleLinux 8
+- OracleLinux 9<sup>1</sup>
 - AlmaLinux 8<sup>1</sup>
 - AlmaLinux 9<sup>1</sup>
+- Debian 10 (Buster)<sup>1</sup>
 - Debian 11 (Bullseye)<sup>1</sup>
 - Ubuntu 20.04 LTS<sup>1</sup>
 - Ubuntu 22.04 LTS<sup>1</sup>
@@ -103,6 +105,7 @@ awx_casc_resources:
 <pre><code>
 - name: sample playbook for role 'awx_casc' pre playbook
   ansible.builtin.import_playbook: converge-pre.yml
+  when: molecule_converge_pre is undefined or molecule_converge_pre | bool
 
 - name: sample playbook for role 'awx_casc'
   hosts: all
@@ -110,6 +113,8 @@ awx_casc_resources:
   vars:
     awx_command: /usr/local/bin/awx
     awx_config_path: /tmp/awx-config
+  roles:
+    - deitkrachten.showinfo
   tasks:
     - name: Include role 'awx_casc'
       ansible.builtin.include_role:

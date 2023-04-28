@@ -1,27 +1,32 @@
 ---
 
-- name: Create AWX users
+- name: Create AWX user
   awx.awx.user:
+
+    # AWX connection & authentication
+    controller_config_file: "{{ awx_config_file | default(omit) }}"
     controller_host: "{{ awx_url }}"
     controller_username: "{{ awx_username if awx_token is undefined else omit }}"
     controller_password: "{{ awx_password if awx_token is undefined else omit }}"
     controller_oauthtoken: "{{ awx_token | default(omit) }}"
     validate_certs: "{{ awx_verify_ssl }}"
 
+    # Required parameters
     username: "{{ item.username }}"
-    state: "{{ item.state | default(omit) }}"
 
+    # Optional parameters
     email: "{{ item.email | default(omit) }}"
     first_name: "{{ item.first_name | default(omit) }}"
     is_superuser: "{{ item.is_superuser | default(omit) }}"
     is_system_auditor: "{{ item.is_system_auditor | default(omit) }}"
     last_name: "{{ item.last_name | default(omit) }}"
-    password: "{{ item.password | default(omit) }}"
+    new_username: "{{ item.new_username | default(omit) }}"
     organization: "{{ item.organization | default(omit) }}"
+    password: "{{ item.password | default(omit) }}"
+    state: "{{ item.state | default(omit) }}"
     update_secrets: "{{ item.update_secrets | default(omit) }}"
 
-
-  # ignore_errors: yes
+  ignore_errors: "{{ ignore_errors | default(False) }}"  # noqa ignore-errors
   loop: "{{ lookup('file', awx_config_path + '/users/users.yml') | from_yaml }}"
   loop_control:
     label:

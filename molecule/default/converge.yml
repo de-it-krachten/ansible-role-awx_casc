@@ -2,6 +2,7 @@
 
 - name: Converge pre playbook
   ansible.builtin.import_playbook: converge-pre.yml
+  when: molecule_converge_pre is undefined or molecule_converge_pre | bool
 
 - name: Converge
   hosts: all
@@ -9,6 +10,8 @@
   vars:
     awx_command: /usr/local/bin/awx
     awx_config_path: /tmp/awx-config
+  roles:
+    - deitkrachten.showinfo
   tasks:
     - name: Include role 'ansible-role-awx_casc'
       ansible.builtin.include_role:

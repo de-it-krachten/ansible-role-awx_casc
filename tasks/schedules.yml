@@ -1,34 +1,45 @@
 ---
 
-- name: Create AWX schedules
+- name: Create AWX schedule
   awx.awx.schedule:
+
+    # AWX connection & authentication
+    controller_config_file: "{{ awx_config_file | default(omit) }}"
     controller_host: "{{ awx_url }}"
     controller_username: "{{ awx_username if awx_token is undefined else omit }}"
     controller_password: "{{ awx_password if awx_token is undefined else omit }}"
     controller_oauthtoken: "{{ awx_token | default(omit) }}"
     validate_certs: "{{ awx_verify_ssl }}"
 
+    # Required parameters
     name: "{{ item.name }}"
-    state: "{{ item.state | default(omit) }}"
-    organization: "{{ item.organization | default(omit) }}"
-    description: "{{ item.description | default(omit) }}"
 
+    # Optional parameters
     credentials: "{{ item.credentials | default(omit) }}"
+    description: "{{ item.description | default(omit) }}"
     diff_mode: "{{ item.diff_mode | default(omit) }}"
     enabled: "{{ item.enabled | default(omit) }}"
+    execution_environment: "{{ item.execution_environment | default(omit) }}"
     extra_data: "{{ item.extra_data | default(omit) }}"
+    forks: "{{ item.forks | default(omit) }}"
+    instance_groups: "{{ item.instance_groups | default(omit) }}"
     inventory: "{{ item.inventory | default(omit) }}"
+    job_slice_count: "{{ item.job_slice_count | default(omit) }}"
     job_tags: "{{ item.job_tags | default(omit) }}"
     job_type: "{{ item.job_type | default(omit) }}"
+    labels: "{{ item.labels | default(omit) }}"
     limit: "{{ item.limit | default(omit) }}"
     new_name: "{{ item.new_name | default(omit) }}"
+    organization: "{{ item.organization | default(omit) }}"
     rrule: "{{ item.rrule | default(omit) }}"
     scm_branch: "{{ item.scm_branch | default(omit) }}"
     skip_tags: "{{ item.skip_tags | default(omit) }}"
+    state: "{{ item.state | default(omit) }}"
+    timeout: "{{ item.timeout | default(omit) }}"
     unified_job_template: "{{ item.unified_job_template | default(omit) }}"
     verbosity: "{{ item.verbosity | default(omit) }}"
 
-  # ignore_errors: yes
+  ignore_errors: "{{ ignore_errors | default(False) }}"  # noqa ignore-errors
   loop: "{{ lookup('file', awx_config_path + '/schedules/schedules.yml') | from_yaml }}"
   loop_control:
     label:
