@@ -113,8 +113,6 @@ awx_casc_resources:
   vars:
     awx_command: /usr/local/bin/awx
     awx_config_path: /tmp/awx-config
-  roles:
-    - deitkrachten.showinfo
   tasks:
     - name: Include role 'awx_casc'
       ansible.builtin.include_role:
