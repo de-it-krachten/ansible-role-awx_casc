@@ -4,27 +4,38 @@
   ansible.builtin.set_fact:
     inventory_source_var_files: "{{ lookup('fileglob', awx_config_path + '/inventory_sources/source_vars/*.json', wantlist=True) }}"
 
-- name: Create AWX inventory sources  # noqa jinja[spacing]
+- name: Create AWX inventory_source  # noqa jinja[spacing]
   awx.awx.inventory_source:
+
+    # AWX connection & authentication
+    controller_config_file: "{{ awx_config_file | default(omit) }}"
     controller_host: "{{ awx_url }}"
     controller_username: "{{ awx_username if awx_token is undefined else omit }}"
     controller_password: "{{ awx_password if awx_token is undefined else omit }}"
     controller_oauthtoken: "{{ awx_token | default(omit) }}"
     validate_certs: "{{ awx_verify_ssl }}"
 
-    name: "{{ item.name }}"
+    # Required parameters
     inventory: "{{ item.inventory }}"
-    organization: "{{ item.organization }}"
-    description: "{{ item.description | default(omit) }}"
+    name: "{{ item.name }}"
 
+    # Optional parameters
     credential: "{{ item.credential | default(omit) }}"
     custom_virtualenv: "{{ item.custom_virtualenv | default(omit) }}"
+    description: "{{ item.description | default(omit) }}"
     enabled_value: "{{ item.enabled_value | default(omit) }}"
     enabled_var: "{{ item.enabled_var | default(omit) }}"
     execution_environment: "{{ item.execution_environment | default(omit) }}"
     host_filter: "{{ item.host_filter | default(omit) }}"
+    limit: "{{ item.limit | default(omit) }}"
+    new_name: "{{ item.new_name | default(omit) }}"
+    notification_templates_error: "{{ item.notification_templates_error | default(omit) }}"
+    notification_templates_started: "{{ item.notification_templates_started | default(omit) }}"
+    notification_templates_success: "{{ item.notification_templates_success | default(omit) }}"
+    organization: "{{ item.organization | default(omit) }}"
     overwrite: "{{ item.overwrite | default(omit) }}"
     overwrite_vars: "{{ item.overwrite_vars | default(omit) }}"
+    scm_branch: "{{ item.scm_branch | default(omit) }}"
     source: "{{ item.source | default(omit) }}"
     source_path: "{{ item.source_path | default(omit) }}"
     source_project: "{{ item.source_project | default(omit) }}"
@@ -41,7 +52,7 @@
     update_on_launch: "{{ item.update_on_launch | default(omit) }}"
     verbosity: "{{ item.verbosity | default(omit) }}"
 
-  # ignore_errors: yes
+  ignore_errors: "{{ ignore_errors | default(False) }}"  # noqa ignore-errors
   loop: "{{ lookup('file', awx_config_path + '/inventory_sources/inventory_sources.yml') | from_yaml }}"
   loop_control:
     label:

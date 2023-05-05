@@ -1,31 +1,49 @@
 ---
 
-- name: Create AWX project  # noqa ignore-errors
+- name: Create AWX project
   awx.awx.project:
+
+    # AWX connection & authentication
+    controller_config_file: "{{ awx_config_file | default(omit) }}"
     controller_host: "{{ awx_url }}"
     controller_username: "{{ awx_username if awx_token is undefined else omit }}"
     controller_password: "{{ awx_password if awx_token is undefined else omit }}"
     controller_oauthtoken: "{{ awx_token | default(omit) }}"
     validate_certs: "{{ awx_verify_ssl }}"
 
+    # Required parameters
     name: "{{ item.name }}"
     organization: "{{ item.organization }}"
-    allow_override: "{{ item.allow_override }}"
-    credential: "{{ item.credential if item.credential != None else omit }}"
-    custom_virtualenv: "{{ item.custom_virtualenv if item.custom_virtualenv != None else omit }}"
-    description: "{{ item.description }}"
-    scm_branch: "{{ item.scm_branch }}"
-    scm_clean: "{{ item.scm_clean }}"
-    scm_delete_on_update: "{{ item.scm_delete_on_update }}"
-    scm_refspec: "{{ item.scm_refspec }}"
-    scm_type: "{{ item.scm_type }}"
-    scm_update_cache_timeout: "{{ item.scm_update_cache_timeout }}"
-    scm_update_on_launch: "{{ item.scm_update_on_launch }}"
-    scm_url: "{{ item.scm_url }}"
-    timeout: "{{ item.timeout }}"
+
+    # Optional parameters
+    allow_override: "{{ item.allow_override | default(omit) }}"
+    copy_from: "{{ item.copy_from | default(omit) }}"
+    credential: "{{ item.credential | default(omit) }}"
+    custom_virtualenv: "{{ item.custom_virtualenv | default(omit) }}"
+    default_environment: "{{ item.default_environment | default(omit) }}"
+    description: "{{ item.description | default(omit) }}"
+    interval: "{{ item.interval | default(omit) }}"
+    local_path: "{{ item.local_path | default(omit) }}"
+    new_name: "{{ item.new_name | default(omit) }}"
+    notification_templates_error: "{{ item.notification_templates_error | default(omit) }}"
+    notification_templates_started: "{{ item.notification_templates_started | default(omit) }}"
+    notification_templates_success: "{{ item.notification_templates_success | default(omit) }}"
+    scm_branch: "{{ item.scm_branch | default(omit) }}"
+    scm_clean: "{{ item.scm_clean | default(omit) }}"
+    scm_delete_on_update: "{{ item.scm_delete_on_update | default(omit) }}"
+    scm_refspec: "{{ item.scm_refspec | default(omit) }}"
+    scm_track_submodules: "{{ item.scm_track_submodules | default(omit) }}"
+    scm_type: "{{ item.scm_type | default('git') }}"
+    scm_update_cache_timeout: "{{ item.scm_update_cache_timeout | default(omit) }}"
+    scm_update_on_launch: "{{ item.scm_update_on_launch | default(omit) }}"
+    scm_url: "{{ item.scm_url | default(omit) }}"
+    signature_validation_credential: "{{ item.signature_validation_credential | default(omit) }}"
+    state: "{{ item.state | default(omit) }}"
+    timeout: "{{ item.timeout | default(omit) }}"
     update_project: "{{ item.update_project | default(True) }}"
     wait: "{{ item.wait | default(True) }}"
-  ignore_errors: "{{ ignore_errors | default(False) }}"
+
+  ignore_errors: "{{ ignore_errors | default(False) }}"  # noqa ignore-errors
   loop: "{{ lookup('file', awx_config_path + '/projects/projects.yml') | from_yaml }}"
   loop_control:
     label:

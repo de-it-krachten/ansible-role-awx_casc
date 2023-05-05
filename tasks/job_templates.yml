@@ -4,35 +4,50 @@
   ansible.builtin.set_fact:
     job_template_var_files: "{{ lookup('fileglob', awx_config_path + '/job_templates/extra_vars/*.json', wantlist=True) }}"
 
-- name: Create AWX job templates  # noqa ignore-errors jinja[spacing]
+- name: Create AWX job_template  # noqa jinja[spacing]
   awx.awx.job_template:
+
+    # AWX connection & authentication
+    controller_config_file: "{{ awx_config_file | default(omit) }}"
     controller_host: "{{ awx_url }}"
     controller_username: "{{ awx_username if awx_token is undefined else omit }}"
     controller_password: "{{ awx_password if awx_token is undefined else omit }}"
     controller_oauthtoken: "{{ awx_token | default(omit) }}"
     validate_certs: "{{ awx_verify_ssl }}"
 
+    # Required parameters
     name: "{{ item.name }}"
     organization: "{{ item.organization }}"
     inventory: "{{ item.inventory }}"
     project: "{{ item.project }}"
+    playbook: "{{ item.playbook }}"
 
-    allow_simultaneous: "{{ item.allow_simultaneous }}"
-    ask_credential_on_launch: "{{ item.ask_credential_on_launch }}"
-    ask_diff_mode_on_launch: "{{ item.ask_diff_mode_on_launch }}"
-    ask_inventory_on_launch: "{{ item.ask_inventory_on_launch }}"
-    ask_job_type_on_launch: "{{ item.ask_job_type_on_launch }}"
-    ask_limit_on_launch: "{{ item.ask_limit_on_launch }}"
-    ask_scm_branch_on_launch: "{{ item.ask_scm_branch_on_launch }}"
-    ask_skip_tags_on_launch: "{{ item.ask_skip_tags_on_launch }}"
-    ask_tags_on_launch: "{{ item.ask_tags_on_launch }}"
-    ask_variables_on_launch: "{{ item.ask_variables_on_launch }}"
-    ask_verbosity_on_launch: "{{ item.ask_verbosity_on_launch }}"
-    become_enabled: "{{ item.become_enabled }}"
-    credentials: "{{ item.credentials }}"
-    custom_virtualenv: "{{ item.custom_virtualenv }}"
-    description: "{{ item.description }}"
-    diff_mode: "{{ item.diff_mode }}"
+    # Optional parameters
+    allow_simultaneous: "{{ item.allow_simultaneous | default(omit) }}"
+    ask_credential_on_launch: "{{ item.ask_credential_on_launch | default(omit) }}"
+    ask_diff_mode_on_launch: "{{ item.ask_diff_mode_on_launch | default(omit) }}"
+    ask_execution_environment_on_launch: "{{ item.ask_execution_environment_on_launch | default(omit) }}"
+    ask_forks_on_launch: "{{ item.ask_forks_on_launch | default(omit) }}"
+    ask_instance_groups_on_launch: "{{ item.ask_instance_groups_on_launch | default(omit) }}"
+    ask_inventory_on_launch: "{{ item.ask_inventory_on_launch | default(omit) }}"
+    ask_job_slice_count_on_launch: "{{ item.ask_job_slice_count_on_launch | default(omit) }}"
+    ask_job_type_on_launch: "{{ item.ask_job_type_on_launch | default(omit) }}"
+    ask_labels_on_launch: "{{ item.ask_labels_on_launch | default(omit) }}"
+    ask_limit_on_launch: "{{ item.ask_limit_on_launch | default(omit) }}"
+    ask_scm_branch_on_launch: "{{ item.ask_scm_branch_on_launch | default(omit) }}"
+    ask_skip_tags_on_launch: "{{ item.ask_skip_tags_on_launch | default(omit) }}"
+    ask_tags_on_launch: "{{ item.ask_tags_on_launch | default(omit) }}"
+    ask_timeout_on_launch: "{{ item.ask_timeout_on_launch | default(omit) }}"
+    ask_variables_on_launch: "{{ item.ask_variables_on_launch | default(omit) }}"
+    ask_verbosity_on_launch: "{{ item.ask_verbosity_on_launch | default(omit) }}"
+    become_enabled: "{{ item.become_enabled | default(omit) }}"
+    copy_from: "{{ item.copy_from | default(omit) }}"
+    credential: "{{ item.credential | default(omit) }}"
+    credentials: "{{ item.credentials | default(omit) }}"
+    custom_virtualenv: "{{ item.custom_virtualenv | default(omit) }}"
+    description: "{{ item.description | default(omit) }}"
+    diff_mode: "{{ item.diff_mode | default(omit) }}"
+    execution_environment: "{{ item.execution_environment | default(omit) }}"
     extra_vars: >-
       {% set varsfile = awx_config_path + '/job_templates/extra_vars/' + item.name + '.json' %}
       {%- if job_template_var_files is search('/' + item.name + '.json') -%}
@@ -40,30 +55,38 @@
       {%- else -%}
       {}
       {%- endif -%}
-    force_handlers: "{{ item.force_handlers }}"
-    forks: "{{ item.forks }}"
-    host_config_key: "{{ item.host_config_key }}"
-    job_slice_count: "{{ item.job_slice_count }}"
-    job_tags: "{{ item.job_tags }}"
-    job_type: "{{ item.job_type }}"
-    limit: "{{ item.limit }}"
-    playbook: "{{ item.playbook }}"
-    scm_branch: "{{ item.scm_branch }}"
-    skip_tags: "{{ item.skip_tags }}"
-    start_at_task: "{{ item.start_at_task }}"
-    survey_enabled: "{{ item.survey_enabled }}"
-    survey_spec: "{{ item.survey_spec }}"
-    timeout: "{{ item.timeout }}"
-    use_fact_cache: "{{ item.use_fact_cache }}"
-    verbosity: "{{ item.verbosity }}"
+    force_handlers: "{{ item.force_handlers | default(omit) }}"
+    forks: "{{ item.forks | default(omit) }}"
+    host_config_key: "{{ item.host_config_key | default(omit) }}"
+    instance_groups: "{{ item.instance_groups | default(omit) }}"
+    job_slice_count: "{{ item.job_slice_count | default(omit) }}"
+    job_tags: "{{ item.job_tags | default(omit) }}"
+    job_type: "{{ item.job_type | default(omit) }}"
+    labels: "{{ item.labels | default(omit) }}"
+    limit: "{{ item.limit | default(omit) }}"
+    new_name: "{{ item.new_name | default(omit) }}"
+    notification_templates_error: "{{ item.notification_templates_error | default(omit) }}"
+    notification_templates_started: "{{ item.notification_templates_started | default(omit) }}"
+    notification_templates_success: "{{ item.notification_templates_success | default(omit) }}"
+    prevent_instance_group_fallback: "{{ item.prevent_instance_group_fallback | default(omit) }}"
+    scm_branch: "{{ item.scm_branch | default(omit) }}"
+    skip_tags: "{{ item.skip_tags | default(omit) }}"
+    start_at_task: "{{ item.start_at_task | default(omit) }}"
+    state: "{{ item.state | default(omit) }}"
+    survey_enabled: "{{ item.survey_enabled | default(omit) }}"
+    survey_spec: "{{ item.survey_spec | default(omit) }}"
+    timeout: "{{ item.timeout | default(omit) }}"
+    use_fact_cache: "{{ item.use_fact_cache | default(omit) }}"
+    vault_credential: "{{ item.vault_credential | default(omit) }}"
+    verbosity: "{{ item.verbosity | default(omit) }}"
+    webhook_credential: "{{ item.webhook_credential | default(omit) }}"
+    webhook_service: "{{ item.webhook_service | default(omit) }}"
 
-  ignore_errors: "{{ ignore_errors | default(False) }}"
+  ignore_errors: "{{ ignore_errors | default(False) }}"  # noqa ignore-errors
   loop: "{{ lookup('file', awx_config_path + '/job_templates/job_templates.yml') | from_yaml }}"
   loop_control:
     label:
       - "{{ item.name }}"
-  vars:
-    ansible_python_interpreter: "{{ venv_python }}"
   when:
     - item.inventory != None
     - item.project != None

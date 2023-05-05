@@ -1,3 +1,7 @@
 ---
 
-[]
+- name: organization1
+  description: "Organization numer one"
+  # galaxy_credentials: "Ansible Galaxy"
+- name: organization2
+  description: "Organization numer two"

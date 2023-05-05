@@ -1,3 +1,8 @@
 ---
 
-[]
+- name: project1
+  organization: organization1
+  allow_override: yes
+  scm_branch: dev
+  scm_type: git
+  scm_url: https://github.com/de-it-krachten/ansible-playbooks-test.git

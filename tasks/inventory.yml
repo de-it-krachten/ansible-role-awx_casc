@@ -6,15 +6,29 @@
 
 - name: Create AWX inventories  # noqa jinja[spacing]
   awx.awx.inventory:
+
+    # AWX connection & authentication
+    controller_config_file: "{{ awx_config_file | default(omit) }}"
     controller_host: "{{ awx_url }}"
     controller_username: "{{ awx_username if awx_token is undefined else omit }}"
     controller_password: "{{ awx_password if awx_token is undefined else omit }}"
     controller_oauthtoken: "{{ awx_token | default(omit) }}"
     validate_certs: "{{ awx_verify_ssl }}"
 
+    # Required parameters
     name: "{{ item.name }}"
     organization: "{{ item.organization }}"
+
+    # Optional parameters
+    copy_from: "{{ item.copy_from | default(omit) }}"
     description: "{{ item.description | default(omit) }}"
+    host_filter: "{{ item.host_filter | default(omit) }}"
+    input_inventories: "{{ item.input_inventories | default(omit) }}"
+    instance_groups: "{{ item.instance_groups | default(omit) }}"
+    kind: "{{ item.kind | default(omit) }}"
+    new_name: "{{ item.new_name | default(omit) }}"
+    prevent_instance_group_fallback: "{{ item.prevent_instance_group_fallback | default(omit) }}"
+    state: "{{ item.state | default(omit) }}"
     variables: >-
       {% set varsfile = awx_config_path + '/inventory/variables/' + item.name + '.json' %}
       {%- if inventory_var_files is search('/' + item.name + '.json') -%}
@@ -23,7 +37,7 @@
       {}
       {%- endif -%}
 
-  # ignore_errors: yes
+  ignore_errors: "{{ ignore_errors | default(False) }}"  # noqa ignore-errors
   loop: "{{ lookup('file', awx_config_path + '/inventory/inventory.yml') | from_yaml }}"
   loop_control:
     label:

@@ -10,7 +10,8 @@ generic:
 
 molecule:
   requirements:
-    roles_extra: []
+    roles_extra:
+      - deitkrachten.python
   converge:
     pre: converge-pre.yml
     become: "no"
@@ -47,6 +48,9 @@ platforms:
     molecule:
       docker:
         image: "dropveter/olam:latest"
+  oraclelinux9:
+    ci: false
+    supported: true
   almalinux8:
     ci: false
     supported: true
@@ -55,7 +59,7 @@ platforms:
     supported: true
   debian10:
     ci: false
-    supported: false
+    supported: true
   debian11:
     ci: false
     supported: true
@@ -68,10 +72,10 @@ platforms:
   ubuntu2204:
     ci: false
     supported: true
-  fedora35:
+  fedora36:
     ci: false
     supported: false
-  fedora36:
+  fedora37:
     ci: false
     supported: true
   alpine:
