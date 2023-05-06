@@ -1,3 +1,17 @@
+# [1.1.0](https://github.com/de-it-krachten/ansible-role-awx_casc/compare/v1.0.3...v1.1.0) (2023-05-06)
+
+
+### Bug Fixes
+
+* Add support for credential input ([0d20191](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/0d20191548421cb795a7b387a04656a6dba046f9))
+* Fix issues encountered when creating from scratch ([90b1592](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/90b1592187e492f0434bf0f6b31b1c843449471c))
+* Implement missing parameters for all modules ([3dadd76](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/3dadd766af5aaf09bf219cd19538112e315764a0))
+
+
+### Features
+
+* Add optional check for host presense in DNS ([911702a](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/911702a03711ffeb7160b1286fb17acc95a00e9f))
+
 ## [1.0.3](https://github.com/de-it-krachten/ansible-role-awx_casc/compare/v1.0.2...v1.0.3) (2022-11-10)
 
 
