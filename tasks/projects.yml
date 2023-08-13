@@ -40,7 +40,7 @@
     signature_validation_credential: "{{ item.signature_validation_credential | default(omit) }}"
     state: "{{ item.state | default(omit) }}"
     timeout: "{{ item.timeout | default(omit) }}"
-    update_project: "{{ item.update_project | default(True) }}"
+    # update_project: "{{ item.update_project | default(True) }}"
     wait: "{{ item.wait | default(True) }}"
 
   ignore_errors: "{{ ignore_errors | default(False) }}"  # noqa ignore-errors
@@ -48,3 +48,21 @@
   loop_control:
     label:
       - "{{ item.name }}"
+
+- name: Force project update
+  awx.awx.project_update:
+    # AWX connection & authentication
+    controller_config_file: "{{ awx_config_file | default(omit) }}"
+    controller_host: "{{ awx_url }}"
+    controller_username: "{{ awx_username if awx_token is undefined else omit }}"
+    controller_password: "{{ awx_password if awx_token is undefined else omit }}"
+    controller_oauthtoken: "{{ awx_token | default(omit) }}"
+    validate_certs: "{{ awx_verify_ssl }}"
+
+    project: "{{ item.name }}"
+
+  loop: "{{ lookup('file', awx_config_path + '/projects/projects.yml') | from_yaml }}"
+  loop_control:
+    label:
+      - "{{ item.name }}"
+  when: item.update_project is defined and item.update_project | bool
