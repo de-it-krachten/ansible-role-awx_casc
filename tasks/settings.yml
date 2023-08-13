@@ -38,6 +38,7 @@
     - item.key in keys_required
     - item.key in keys_present
     - item.key is not search('(AUTH_LDAP_\\d|SOCIAL|AUTH_LDAP_BIND_PASSWORD|INSTALL_UUID)')
+    - item.value is defined
     - item.value != None
     - item.value | type_debug is search('(bool|int|float)') or item.value | length > 0
     - (settings_present[item.key] is undefined or item.value != settings_present[item.key])

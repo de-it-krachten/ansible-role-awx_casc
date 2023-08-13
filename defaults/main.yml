@@ -33,6 +33,9 @@ awx_verify_ssl: false
 # Location where to get configuration files from
 # awx_config_path: /tmp/awx
 
+# Skip creating hosts and assigning hosts to groups
+awx_casc_skip_hosts: false
+
 # List of resources to export
 awx_casc_resources:
   - settings
