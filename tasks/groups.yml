@@ -4,14 +4,6 @@
   ansible.builtin.set_fact:
     group_var_files: "{{ lookup('fileglob', awx_config_path + '/groups/variables/*.json', wantlist=True) }}"
 
-- debug:
-    msg: >-
-      {%- if awx_casc_skip_hosts | bool -%}
-      []
-      {%- else -%}
-      {{ item.hosts | default([]) | difference(awx_hosts_non_existing) }}
-      {%- endif -%}
-
 - name: Create AWX groups  # noqa jinja[spacing]
   awx.awx.group:
 
@@ -48,7 +40,7 @@
       {}
       {%- endif -%}
 
-  ignore_errors: "{{ ignore_errors | default(False) }}"  # noqa ignore-errors
+  ignore_errors: "{{ awx_ignore_errors | default(False) }}"  # noqa ignore-errors
   loop: "{{ lookup('file', awx_config_path + '/groups/groups.yml') | from_yaml }}"
   loop_control:
     label: "{{ item.name }}"

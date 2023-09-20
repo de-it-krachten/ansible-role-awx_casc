@@ -26,7 +26,7 @@
     state: "{{ item.state | default(omit) }}"
     update_secrets: "{{ item.update_secrets | default(omit) }}"
 
-  ignore_errors: "{{ ignore_errors | default(False) }}"  # noqa ignore-errors
+  ignore_errors: "{{ awx_ignore_errors | default(False) }}"  # noqa ignore-errors
   loop: "{{ lookup('file', awx_config_path + '/users/users.yml') | from_yaml }}"
   loop_control:
     label: "{{ item.username }}"

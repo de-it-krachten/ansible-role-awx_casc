@@ -43,7 +43,7 @@
     # update_project: "{{ item.update_project | default(True) }}"
     wait: "{{ item.wait | default(True) }}"
 
-  ignore_errors: "{{ ignore_errors | default(False) }}"  # noqa ignore-errors
+  ignore_errors: "{{ awx_ignore_errors | default(False) }}"  # noqa ignore-errors
   loop: "{{ lookup('file', awx_config_path + '/projects/projects.yml') | from_yaml }}"
   loop_control:
     label: "{{ item.name }}"
