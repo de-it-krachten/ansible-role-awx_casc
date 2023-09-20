@@ -28,8 +28,7 @@
     notification_templates_success: "{{ item.notification_templates_success | default(omit) }}"
     state: "{{ item.state | default(omit) }}"
 
-  ignore_errors: "{{ ignore_errors | default(False) }}"  # noqa ignore-errors
+  ignore_errors: "{{ awx_ignore_errors | default(False) }}"  # noqa ignore-errors
   loop: "{{ lookup('file', awx_config_path + '/organizations/organizations.yml') | from_yaml }}"
   loop_control:
-    label:
-      - "{{ item.name }}"
+    label: "{{ item.name }}"

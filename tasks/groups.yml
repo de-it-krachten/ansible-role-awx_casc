@@ -22,7 +22,12 @@
     # Optional parameters
     children: "{{ item.children | default([]) }}"
     description: "{{ item.description | default(omit) }}"
-    hosts: "{{ item.hosts | default([]) | difference(awx_hosts_non_existing) }}"
+    hosts: >-
+      {%- if awx_casc_skip_hosts | bool -%}
+      []
+      {%- else -%}
+      {{ item.hosts | default([]) | difference(awx_hosts_non_existing) }}
+      {%- endif -%}
     new_name: "{{ item.new_name | default(omit) }}"
     preserve_existing_children: "{{ item.preserve_existing_children | default(omit) }}"
     preserve_existing_hosts: "{{ item.preserve_existing_hosts | default(omit) }}"
@@ -35,8 +40,7 @@
       {}
       {%- endif -%}
 
-  ignore_errors: "{{ ignore_errors | default(False) }}"  # noqa ignore-errors
+  ignore_errors: "{{ awx_ignore_errors | default(False) }}"  # noqa ignore-errors
   loop: "{{ lookup('file', awx_config_path + '/groups/groups.yml') | from_yaml }}"
   loop_control:
-    label:
-      - "{{ item.name }}"
+    label: "{{ item.name }}"

@@ -1,7 +1,7 @@
 ---
 
-- name: Create AWX team
-  awx.awx.team:
+- name: Create AWX application
+  awx.awx.execution_environment:
 
     # AWX connection & authentication
     controller_config_file: "{{ awx_config_file | default(omit) }}"
@@ -13,14 +13,17 @@
 
     # Required parameters
     name: "{{ item.name }}"
-    organization: "{{ item.organization }}"
+    image: "{{ item.image }}"
 
     # Optional parameters
+    credential: "{{ item.credential | default(omit) }}"
     description: "{{ item.description | default(omit) }}"
     new_name: "{{ item.new_name | default(omit) }}"
+    organization: "{{ item.organization | default(omit) }}"
+    pull: "{{ item.pull | default(omit) }}"
     state: "{{ item.state | default(omit) }}"
 
   ignore_errors: "{{ awx_ignore_errors | default(False) }}"  # noqa ignore-errors
-  loop: "{{ lookup('file', awx_config_path + '/teams/teams.yml') | from_yaml }}"
+  loop: "{{ lookup('file', awx_config_path + '/execution_environments/execution_environments.yml') | from_yaml }}"
   loop_control:
     label: "{{ item.name }}"

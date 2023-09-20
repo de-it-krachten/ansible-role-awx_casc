@@ -52,8 +52,7 @@
     update_on_launch: "{{ item.update_on_launch | default(omit) }}"
     verbosity: "{{ item.verbosity | default(omit) }}"
 
-  ignore_errors: "{{ ignore_errors | default(False) }}"  # noqa ignore-errors
+  ignore_errors: "{{ awx_ignore_errors | default(False) }}"  # noqa ignore-errors
   loop: "{{ lookup('file', awx_config_path + '/inventory_sources/inventory_sources.yml') | from_yaml }}"
   loop_control:
-    label:
-      - "{{ item.name }}"
+    label: "{{ item.name }}"
