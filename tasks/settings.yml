@@ -45,8 +45,7 @@
   # failed_when: false
   loop: "{{ settings_required }}"
   loop_control:
-    label:
-      - "{{ item.key }}"
+    label: "{{ item.key }}"
 
 - name: Setting - set LDAP bind password
   awx.awx.settings:

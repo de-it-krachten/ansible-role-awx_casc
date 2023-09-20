@@ -51,5 +51,4 @@
   ignore_errors: "{{ ignore_errors | default(False) }}"  # noqa ignore-errors
   loop: "{{ lookup('file', awx_config_path + '/groups/groups.yml') | from_yaml }}"
   loop_control:
-    label:
-      - "{{ item.name }}"
+    label: "{{ item.name }}"

@@ -38,5 +38,4 @@
   ignore_errors: "{{ ignore_errors | default(False) }}"  # noqa ignore-errors
   loop: "{{ lookup('file', awx_config_path + '/roles/roles.yml') | from_yaml }}"
   loop_control:
-    label:
-      - "{{ item.name }}"
+    label: "{{ item.name }}"
