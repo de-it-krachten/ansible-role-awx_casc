@@ -1,3 +1,17 @@
+# [1.2.0](https://github.com/de-it-krachten/ansible-role-awx_casc/compare/v1.1.0...v1.2.0) (2023-09-20)
+
+
+### Bug Fixes
+
+* Add optional skipping of assigning hosts to groups ([3a8930a](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/3a8930aa34dfe2597ba7fbf8f58edefa673e31df))
+* Change loop/label for latest ansible ([8f375d2](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/8f375d22391581870adeb14e499e8b72e4b7406e))
+
+
+### Features
+
+* Add support for AWX execution environments ([97f29db](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/97f29dbdd027f1cb63590c1440af2d068b660c94))
+* Update supported platforms & CI ([aaffbfc](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/aaffbfcd26a7d2040c01af6c5ca2f5e4fa375d7f))
+
 # [1.1.0](https://github.com/de-it-krachten/ansible-role-awx_casc/compare/v1.0.3...v1.1.0) (2023-05-06)
 
 
