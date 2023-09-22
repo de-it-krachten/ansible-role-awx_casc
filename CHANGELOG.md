@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/de-it-krachten/ansible-role-awx_casc/compare/v1.2.0...v1.2.1) (2023-09-22)
+
+
+### Bug Fixes
+
+* Retrieve token when running in check-mode ([1bdea64](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/1bdea640dd39f68d583e3c9ced4af99e18d5e14d))
+
 # [1.2.0](https://github.com/de-it-krachten/ansible-role-awx_casc/compare/v1.1.0...v1.2.0) (2023-09-20)
 
 
