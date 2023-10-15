@@ -36,13 +36,17 @@ awx_verify_ssl: false
 # Skip creating hosts and assigning hosts to groups
 awx_casc_skip_hosts: false
 
+# Format for variables & input files
+awx_vars_format: json
+awx_input_format: json
+
 # List of resources to export
 awx_casc_resources:
   - settings
   - organizations
   - credential_types
   - credentials
-  # - execution_environments
+  - execution_environments
   - inventory
   - inventory_sources
   - { name: projects, ignore_errors: true }
