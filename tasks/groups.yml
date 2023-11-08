@@ -29,6 +29,9 @@
     preserve_existing_hosts: "{{ item.preserve_existing_hosts | default(omit) }}"
     state: "{{ item.state | default(omit) }}"
     variables: >-
+      {%- if item.variables is defined -%}
+      {{ item.variables }}
+      {%- else -%}
       {%- set var_path = '/groups/variables/' -%}
       {%- if awx_vars_format == 'json' -%}
       {%- set varsfile = awx_config_path + var_path + item.name + '.json' -%}
@@ -36,6 +39,7 @@
       {%- elif awx_vars_format == 'yaml' -%}
       {%- set varsfile = awx_config_path + var_path + item.name + '.yml' -%}
       {{ lookup('file', varsfile, errors='ignore') | from_yaml | default({}, true) }}
+      {%- endif -%}
       {%- endif -%}
 
   ignore_errors: "{{ awx_ignore_errors | default(False) }}"  # noqa ignore-errors

@@ -13,7 +13,6 @@ Import AWX configuration using Configuration-as-Code
 None
 
 #### Collections
-- community.general
 - awx.awx
 
 ## Platforms
@@ -77,13 +76,17 @@ awx_verify_ssl: false
 # Skip creating hosts and assigning hosts to groups
 awx_casc_skip_hosts: false
 
+# Format for variables & input files
+awx_vars_format: json
+awx_input_format: json
+
 # List of resources to export
 awx_casc_resources:
   - settings
   - organizations
   - credential_types
   - credentials
-  # - execution_environments
+  - execution_environments
   - inventory
   - inventory_sources
   - { name: projects, ignore_errors: true }
@@ -110,10 +113,9 @@ awx_casc_resources:
 - name: sample playbook for role 'awx_casc' pre playbook
   ansible.builtin.import_playbook: converge-pre.yml
   when: molecule_converge_pre is undefined or molecule_converge_pre | bool
-
 - name: sample playbook for role 'awx_casc'
   hosts: all
-  become: "no"
+  become: 'no'
   vars:
     awx_command: /usr/local/bin/awx
     awx_config_path: /tmp/awx-config

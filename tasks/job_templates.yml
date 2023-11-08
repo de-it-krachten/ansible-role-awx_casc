@@ -45,6 +45,9 @@
     diff_mode: "{{ item.diff_mode | default(omit) }}"
     execution_environment: "{{ item.execution_environment | default(omit) }}"
     extra_vars: >-
+      {%- if item.extra_vars is defined -%}
+      {{ item.extra_vars }}
+      {%- else -%}
       {%- set var_path = '/job_templates/extra_vars/' -%}
       {%- if awx_vars_format == 'json' -%}
       {%- set varsfile = awx_config_path + var_path + item.name + '.json' -%}
@@ -52,6 +55,7 @@
       {%- elif awx_vars_format == 'yaml' -%}
       {%- set varsfile = awx_config_path + var_path + item.name + '.yml' -%}
       {{ lookup('file', varsfile, errors='ignore') | from_yaml | default({}, true) }}
+      {%- endif -%}
       {%- endif -%}
     force_handlers: "{{ item.force_handlers | default(omit) }}"
     forks: "{{ item.forks | default(omit) }}"

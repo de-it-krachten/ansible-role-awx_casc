@@ -1,6 +1,6 @@
 ---
 
-- name: Create AWX workflow_job_template
+- name: Create AWX workflow_job_template  # noqa jinja[spacing]
   awx.awx.workflow_job_template:
 
     # AWX connection & authentication
@@ -27,6 +27,9 @@
     description: "{{ item.description | default(omit) }}"
     destroy_current_nodes: "{{ item.destroy_current_nodes | default(omit) }}"
     extra_vars: >-
+      {%- if item.extra_vars is defined -%}
+      {{ item.extra_vars }}
+      {%- else -%}
       {%- set var_path = '/workflow_job_templates/extra_vars/' -%}
       {%- if awx_vars_format == 'json' -%}
       {%- set varsfile = awx_config_path + var_path + item.name + '.json' -%}
@@ -34,6 +37,7 @@
       {%- elif awx_vars_format == 'yaml' -%}
       {%- set varsfile = awx_config_path + var_path + item.name + '.yml' -%}
       {{ lookup('file', varsfile, errors='ignore') | from_yaml | default({}, true) }}
+      {%- endif -%}
       {%- endif -%}
     inventory: "{{ item.inventory | default(omit) }}"
     job_tags: "{{ item.job_tags | default(omit) }}"
@@ -50,16 +54,23 @@
     state: "{{ item.state | default(omit) }}"
     survey_enabled: "{{ item.survey_enabled | default(omit) }}"
     survey_spec: >-
+      {%- if item.survey_spec is defined -%}
+      {{ item.survey_spec }}
+      {%- else -%}
       {%- set var_path = '/workflow_job_templates/survey_spec/' -%}
       {%- set varsfile = awx_config_path + var_path + item.name + '.json' -%}
       {{ lookup('file', varsfile, errors='ignore') | default(omit, true) }}
+      {%- endif -%}
     webhook_credential: "{{ item.webhook_credential | default(omit) }}"
     webhook_service: "{{ item.webhook_service | default(omit) }}"
     workflow_nodes: >-
+      {%- if item.workflow_nodes is defined -%}
+      {{ item.workflow_nodes }}
+      {%- else -%}
       {%- set var_path = '/workflow_job_templates/workflow_nodes/' -%}
       {%- set varsfile = awx_config_path + var_path + item.name + '.json' -%}
       {{ lookup('file', varsfile, errors='ignore') | default(omit, true) }}
-
+      {%- endif -%}
   ignore_errors: "{{ awx_ignore_errors | default(False) }}"  # noqa ignore-errors
   loop: "{{ lookup('file', awx_config_path + '/workflow_job_templates/workflow_job_templates.yml') | from_yaml }}"
   loop_control:

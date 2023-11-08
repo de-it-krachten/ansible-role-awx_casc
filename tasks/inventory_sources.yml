@@ -36,6 +36,9 @@
     source_path: "{{ item.source_path | default(omit) }}"
     source_project: "{{ item.source_project | default(omit) }}"
     source_vars: >-
+      {%- if item.source_vars is defined -%}
+      {{ item.source_vars }}
+      {%- else -%}
       {%- set var_path = '/inventory_sources/source_vars/' -%}
       {%- if awx_vars_format == 'json' -%}
       {%- set varsfile = awx_config_path + var_path + item.name + '.json' -%}
@@ -43,6 +46,7 @@
       {%- elif awx_vars_format == 'yaml' -%}
       {%- set varsfile = awx_config_path + var_path + item.name + '.yml' -%}
       {{ lookup('file', varsfile, errors='ignore') | from_yaml | default({}, true) }}
+      {%- endif -%}
       {%- endif -%}
     state: "{{ item.state | default(omit) }}"
     timeout: "{{ item.timeout | default(omit) }}"
