@@ -1,3 +1,15 @@
+# [1.3.0](https://github.com/de-it-krachten/ansible-role-awx_casc/compare/v1.2.1...v1.3.0) (2023-11-08)
+
+
+### Bug Fixes
+
+* Add support for inline variables/extra-vars ([2d0cbbc](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/2d0cbbcb4e8048d21c8f006057e67f7c9e783dcd))
+
+
+### Features
+
+* Add support for variables/extra-vars in yaml format ([49b487f](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/49b487f828f0e9967bafe89e7dd59eb55f14c620))
+
 ## [1.2.1](https://github.com/de-it-krachten/ansible-role-awx_casc/compare/v1.2.0...v1.2.1) (2023-09-22)
 
 
