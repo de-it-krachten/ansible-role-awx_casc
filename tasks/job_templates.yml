@@ -1,9 +1,5 @@
 ---
 
-- name: Get all variables file
-  ansible.builtin.set_fact:
-    job_template_var_files: "{{ lookup('fileglob', awx_config_path + '/job_templates/extra_vars/*.json', wantlist=True) }}"
-
 - name: Create AWX job_template  # noqa jinja[spacing]
   awx.awx.job_template:
 
@@ -49,11 +45,17 @@
     diff_mode: "{{ item.diff_mode | default(omit) }}"
     execution_environment: "{{ item.execution_environment | default(omit) }}"
     extra_vars: >-
-      {% set varsfile = awx_config_path + '/job_templates/extra_vars/' + item.name + '.json' %}
-      {%- if job_template_var_files is search('/' + item.name + '.json') -%}
-      {{ lookup('file', varsfile) }}
+      {%- if item.extra_vars is defined -%}
+      {{ item.extra_vars }}
       {%- else -%}
-      {}
+      {%- set var_path = '/job_templates/extra_vars/' -%}
+      {%- if awx_vars_format == 'json' -%}
+      {%- set varsfile = awx_config_path + var_path + item.name + '.json' -%}
+      {{ lookup('file', varsfile, errors='ignore') | default({}, true) }}
+      {%- elif awx_vars_format == 'yaml' -%}
+      {%- set varsfile = awx_config_path + var_path + item.name + '.yml' -%}
+      {{ lookup('file', varsfile, errors='ignore') | from_yaml | default({}, true) }}
+      {%- endif -%}
       {%- endif -%}
     force_handlers: "{{ item.force_handlers | default(omit) }}"
     forks: "{{ item.forks | default(omit) }}"
@@ -74,7 +76,10 @@
     start_at_task: "{{ item.start_at_task | default(omit) }}"
     state: "{{ item.state | default(omit) }}"
     survey_enabled: "{{ item.survey_enabled | default(omit) }}"
-    survey_spec: "{{ item.survey_spec | default(omit) }}"
+    survey_spec: >-
+      {%- set var_path = '/job_templates/survey_spec/' -%}
+      {%- set varsfile = awx_config_path + var_path + item.name + '.json' -%}
+      {{ lookup('file', varsfile, errors='ignore') | default(omit, true) }}
     timeout: "{{ item.timeout | default(omit) }}"
     use_fact_cache: "{{ item.use_fact_cache | default(omit) }}"
     vault_credential: "{{ item.vault_credential | default(omit) }}"
