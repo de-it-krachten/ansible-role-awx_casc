@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/de-it-krachten/ansible-role-awx_casc/compare/v1.3.0...v1.3.1) (2024-04-11)
+
+
+### Bug Fixes
+
+* Fix wrong variables for vars/inputs ([43e1e4c](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/43e1e4c498374e12c3592974757a42f1e201c078))
+
 # [1.3.0](https://github.com/de-it-krachten/ansible-role-awx_casc/compare/v1.2.1...v1.3.0) (2023-11-08)
 
 
