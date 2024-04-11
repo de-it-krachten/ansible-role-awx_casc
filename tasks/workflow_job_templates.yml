@@ -58,8 +58,13 @@
       {{ item.survey_spec }}
       {%- else -%}
       {%- set var_path = '/workflow_job_templates/survey_spec/' -%}
+      {%- if awx_vars_format == 'json' -%}
       {%- set varsfile = awx_config_path + var_path + item.name + '.json' -%}
       {{ lookup('file', varsfile, errors='ignore') | default(omit, true) }}
+      {%- elif awx_vars_format == 'yaml' -%}
+      {%- set varsfile = awx_config_path + var_path + item.name + '.yml' -%}
+      {{ lookup('file', varsfile, errors='ignore') | from_yaml | default(omit, true) }}
+      {%- endif -%}
       {%- endif -%}
     webhook_credential: "{{ item.webhook_credential | default(omit) }}"
     webhook_service: "{{ item.webhook_service | default(omit) }}"
@@ -68,8 +73,13 @@
       {{ item.workflow_nodes }}
       {%- else -%}
       {%- set var_path = '/workflow_job_templates/workflow_nodes/' -%}
+      {%- if awx_vars_format == 'json' -%}
       {%- set varsfile = awx_config_path + var_path + item.name + '.json' -%}
       {{ lookup('file', varsfile, errors='ignore') | default(omit, true) }}
+      {%- elif awx_vars_format == 'yaml' -%}
+      {%- set varsfile = awx_config_path + var_path + item.name + '.yml' -%}
+      {{ lookup('file', varsfile, errors='ignore') | from_yaml | default(omit, true) }}
+      {%- endif -%}
       {%- endif -%}
   ignore_errors: "{{ awx_ignore_errors | default(False) }}"  # noqa ignore-errors
   loop: "{{ lookup('file', awx_config_path + '/workflow_job_templates/workflow_job_templates.yml') | from_yaml }}"

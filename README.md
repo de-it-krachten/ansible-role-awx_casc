@@ -78,7 +78,7 @@ awx_casc_skip_hosts: false
 
 # Format for variables & input files
 awx_vars_format: json
-awx_input_format: json
+awx_inputs_format: json
 
 # List of resources to export
 awx_casc_resources:
