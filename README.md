@@ -13,7 +13,7 @@ Import AWX configuration using Configuration-as-Code
 None
 
 #### Collections
-- {'name': 'awx.awx'}
+- awx.awx
 
 ## Platforms
 
