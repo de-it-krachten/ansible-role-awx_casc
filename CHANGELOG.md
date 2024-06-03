@@ -1,3 +1,15 @@
+# [1.4.0](https://github.com/de-it-krachten/ansible-role-awx_casc/compare/v1.3.1...v1.4.0) (2024-06-03)
+
+
+### Bug Fixes
+
+* Read user password from external file ([d21a7e9](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/d21a7e91ae4daf088358c221a0ef7bdd278ae270))
+
+
+### Features
+
+* Add support for Ubuntu 24.04 LTS + Fedora 40 ([ebfd739](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/ebfd739c7eacb0ad6a048b174234b27b44cc15ad))
+
 ## [1.3.1](https://github.com/de-it-krachten/ansible-role-awx_casc/compare/v1.3.0...v1.3.1) (2024-04-11)
 
 
