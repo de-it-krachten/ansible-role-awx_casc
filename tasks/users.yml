@@ -22,7 +22,8 @@
     last_name: "{{ item.last_name | default(omit) }}"
     new_username: "{{ item.new_username | default(omit) }}"
     organization: "{{ item.organization | default(omit) }}"
-    password: "{{ item.password | default(omit) }}"
+    # password: "{{ item.password | default(omit) }}"
+    password: "{{ lookup('file', awx_config_path + '/users/passwords/' + item.username) }}"
     state: "{{ item.state | default(omit) }}"
     update_secrets: "{{ item.update_secrets | default(omit) }}"
 
