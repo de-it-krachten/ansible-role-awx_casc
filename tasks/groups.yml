@@ -1,5 +1,21 @@
 ---
 
+- name: Read all inventories from file
+  ansible.builtin.set_fact:
+    __awx_groups: "{{ lookup('file', awx_config_path + '/groups/groups.yml') | from_yaml }}"
+
+- name: Template variable files
+  ansible.builtin.template:
+    src: "{{ awx_config_path + '/groups/variables/' + item.name + '.yml.j2' }}"
+    dest: "{{ awx_config_path + '/groups/variables/' + item.name + '.yml' }}"
+    block_start_string: "<%"
+    block_end_string: "%>"
+    variable_start_string: "<="
+    variable_end_string: "=>"
+  changed_when: false
+  failed_when: false
+  loop: "{{ __awx_groups }}"
+
 - name: Create AWX groups  # noqa jinja[spacing]
   awx.awx.group:
 
@@ -20,9 +36,9 @@
     description: "{{ item.description | default(omit) }}"
     hosts: >-
       {%- if awx_casc_skip_hosts | bool -%}
-      []
+        []
       {%- else -%}
-      {{ item.hosts | default([]) | difference(awx_hosts_non_existing) }}
+        {{ item.hosts | default([]) | difference(awx_hosts_non_existing) }}
       {%- endif -%}
     new_name: "{{ item.new_name | default(omit) }}"
     preserve_existing_children: "{{ item.preserve_existing_children | default(omit) }}"
@@ -30,19 +46,18 @@
     state: "{{ item.state | default(omit) }}"
     variables: >-
       {%- if item.variables is defined -%}
-      {{ item.variables }}
+        {{ item.variables }}
       {%- else -%}
-      {%- set var_path = '/groups/variables/' -%}
-      {%- if awx_vars_format == 'json' -%}
-      {%- set varsfile = awx_config_path + var_path + item.name + '.json' -%}
-      {{ lookup('file', varsfile, errors='ignore') | default({}, true) }}
-      {%- elif awx_vars_format == 'yaml' -%}
-      {%- set varsfile = awx_config_path + var_path + item.name + '.yml' -%}
-      {{ lookup('file', varsfile, errors='ignore') | from_yaml | default({}, true) }}
+        {%- set var_path = '/groups/variables/' -%}
+        {%- if awx_vars_format == 'json' -%}
+          {%- set varsfile = awx_config_path + var_path + item.name + '.json' -%}
+          {{ lookup('file', varsfile, errors='ignore') | default({}, true) }}
+        {%- elif awx_vars_format == 'yaml' -%}
+          {%- set varsfile = awx_config_path + var_path + item.name + '.yml' -%}
+          {{ lookup('file', varsfile, errors='ignore') | from_yaml | default({}, true) }}
+        {%- endif -%}
       {%- endif -%}
-      {%- endif -%}
-
   ignore_errors: "{{ awx_ignore_errors | default(False) }}"  # noqa ignore-errors
-  loop: "{{ lookup('file', awx_config_path + '/groups/groups.yml') | from_yaml }}"
+  loop: "{{ __awx_groups }}"
   loop_control:
     label: "{{ item.name }}"
