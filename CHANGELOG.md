@@ -1,3 +1,13 @@
+# [1.5.0](https://github.com/de-it-krachten/ansible-role-awx_casc/compare/v1.4.0...v1.5.0) (2024-09-27)
+
+
+### Features
+
+* Add support for workflow templates using jinja vars ([3a90b6e](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/3a90b6eaef56dd95283b7e9356c2c161a4a4be0f))
+* group | Add support for variable template ([dff5946](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/dff5946c3285c0eb40b0a2a955e17fc6db1de98c))
+* host | Add support for variable template ([f8372cb](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/f8372cbe604e4ab065fbbf1b71de5712760abe2e))
+* inventory | Add support for variable template ([51edcd2](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/51edcd25146117a4183cfaaeb864b87a84470268))
+
 # [1.4.0](https://github.com/de-it-krachten/ansible-role-awx_casc/compare/v1.3.1...v1.4.0) (2024-06-03)
 
 
