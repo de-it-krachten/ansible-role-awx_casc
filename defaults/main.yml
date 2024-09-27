@@ -3,6 +3,13 @@
 # Use non default virtual env
 # awx_python_interpreter: /virtenv/awx/bin/python3
 
+# For inventory/host/group, you can replace variable values during creation
+# In order not to replace intended dynamic variables, use the following markers
+# awx_variable_jinja_block_start: "<%"
+# awx_variable_jinja_block_end: "%>"
+# awx_variable_jinja_variable_start: "<="
+# awx_variable_jinja_variable_end: "=>"
+
 # Full path to the awxkit / awx command
 awx_command: awx
 
