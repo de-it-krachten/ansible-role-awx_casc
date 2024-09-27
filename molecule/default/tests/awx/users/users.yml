@@ -8,3 +8,12 @@
   roles:
     - System Administrator
   username: admin
+
+- email: admin1@example.com
+  first_name: ''
+  is_superuser: true
+  is_system_auditor: false
+  last_name: ''
+  roles:
+    - System Administrator
+  username: admin1

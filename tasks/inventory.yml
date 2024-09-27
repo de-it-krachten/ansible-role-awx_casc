@@ -8,6 +8,7 @@
   ansible.builtin.template:
     src: "{{ awx_config_path + '/inventory/variables/' + item.name + '.yml.j2' }}"
     dest: "{{ awx_config_path + '/inventory/variables/' + item.name + '.yml' }}"
+    mode: "0600"
     block_start_string: "<%"
     block_end_string: "%>"
     variable_start_string: "<="
