@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/de-it-krachten/ansible-role-awx_casc/compare/v1.5.0...v1.6.0) (2024-12-29)
+
+
+### Features
+
+* Update supported platforms & CI ([ec2b115](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/ec2b1159201509bbb9417cc4560a4e4708f6933e))
+
 # [1.5.0](https://github.com/de-it-krachten/ansible-role-awx_casc/compare/v1.4.0...v1.5.0) (2024-09-27)
 
 
