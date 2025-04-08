@@ -43,6 +43,9 @@ awx_verify_ssl: false
 # Skip creating hosts and assigning hosts to groups
 awx_casc_skip_hosts: false
 
+# Forcingly recreate workflow templates
+awx_workflow_job_template_recreate: false
+
 # Format for variables & input files
 awx_vars_format: json
 awx_inputs_format: json
