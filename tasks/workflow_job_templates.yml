@@ -1,4 +1,30 @@
 ---
+- name: Delete workflow_job_templates due to recreation
+  awx.awx.workflow_job_template:
+    # AWX connection & authentication
+    controller_config_file: "{{ awx_config_file | default(omit) }}"
+    controller_host: "{{ awx_url }}"
+    controller_username: "{{ awx_username if awx_token is undefined else omit }}"
+    controller_password: "{{ awx_password if awx_token is undefined else omit }}"
+    controller_oauthtoken: "{{ awx_token | default(omit) }}"
+    validate_certs: "{{ awx_verify_ssl }}"
+
+    name: "{{ item.name }}"
+    state: absent
+
+  when:
+    - (item.state | default('present')) == 'present'
+    - awx_workflow_job_template_recreate | default(false) | bool
+  ignore_errors: "{{ awx_ignore_errors | default(False) }}"  # noqa ignore-errors
+  loop: "{{ lookup('file', awx_config_path + '/workflow_job_templates/workflow_job_templates.yml') | from_yaml }}"
+  loop_control:
+    label: "{{ item.name }}"
+
+- name: Wait for 60 seconds
+  ansible.builtin.pause:
+    seconds: 60
+  when:
+    - awx_workflow_job_template_recreate | default(false) | bool
 
 - name: Create AWX workflow_job_template  # noqa jinja[spacing]
   awx.awx.workflow_job_template:
