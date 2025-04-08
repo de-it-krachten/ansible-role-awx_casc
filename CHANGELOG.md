@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/de-it-krachten/ansible-role-awx_casc/compare/v1.6.0...v1.7.0) (2025-04-08)
+
+
+### Features
+
+* Add support for workflow recreation ([327f78c](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/327f78cde178f99e8950da24d2cb2385fdc7d284))
+
 # [1.6.0](https://github.com/de-it-krachten/ansible-role-awx_casc/compare/v1.5.0...v1.6.0) (2024-12-29)
 
 
