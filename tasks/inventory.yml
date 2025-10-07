@@ -59,3 +59,64 @@
   loop: "{{ __awx_inventories }}"
   loop_control:
     label: "{{ item.name }}"
+
+- name: Grant access to specific teams
+  awx.awx.role:
+
+    # AWX connection & authentication
+    controller_config_file: "{{ awx_config_file | default(omit) }}"
+    controller_host: "{{ awx_url }}"
+    controller_username: "{{ awx_username if awx_token is undefined else omit }}"
+    controller_password: "{{ awx_password if awx_token is undefined else omit }}"
+    controller_oauthtoken: "{{ awx_token | default(omit) }}"
+    validate_certs: "{{ awx_verify_ssl }}"
+
+    team: "{{ item.1.name }}"
+    role: "{{ item.1.role }}"
+    inventories:
+      - "{{ item.0.name }}"
+    state: "{{ item.1.state | default('present') }}"
+
+  loop: >-
+    {{
+      __awx_inventories
+      | selectattr('roles', 'defined')
+      | list
+      | subelements('roles')
+      | selectattr('1.type', 'defined')
+      | selectattr('1.type', 'equalto', 'team')
+      | list
+    }}
+  loop_control:
+    label: "{{ item.0.name }} -> {{ item.1.name }}"
+
+- name: Grant access to specific users
+  awx.awx.role:
+
+    # AWX connection & authentication
+    controller_config_file: "{{ awx_config_file | default(omit) }}"
+    controller_host: "{{ awx_url }}"
+    controller_username: "{{ awx_username if awx_token is undefined else omit }}"
+    controller_password: "{{ awx_password if awx_token is undefined else omit }}"
+    controller_oauthtoken: "{{ awx_token | default(omit) }}"
+    validate_certs: "{{ awx_verify_ssl }}"
+
+    user: "{{ item.1.name }}"
+    role: "{{ item.1.role }}"
+    inventories:
+      - "{{ item.0.name }}"
+    state: "{{ item.1.state | default('present') }}"
+
+  loop: >-
+    {{
+      __awx_inventories
+      | selectattr('roles', 'defined')
+      | list
+      | subelements('roles')
+      | selectattr('1.type', 'defined')
+      | selectattr('1.type', 'equalto', 'user')
+      | list
+    }}
+  loop_control:
+    label: "{{ item.0.name }} -> {{ item.1.name }}"
+

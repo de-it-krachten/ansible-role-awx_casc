@@ -1,5 +1,9 @@
 ---
 
+- name: Load job templates from file
+  ansible.builtin.set_fact:
+    __awx_job_templates: "{{ lookup('file', awx_config_path + '/job_templates/job_templates.yml') | from_yaml }}"
+
 - name: Create AWX job_template  # noqa jinja[spacing]
   awx.awx.job_template:
 
@@ -107,9 +111,69 @@
     webhook_service: "{{ item.webhook_service | default(omit) }}"
 
   ignore_errors: "{{ awx_ignore_errors | default(False) }}"  # noqa ignore-errors
-  loop: "{{ lookup('file', awx_config_path + '/job_templates/job_templates.yml') | from_yaml }}"
+  loop: "{{ __awx_job_templates }}"
   loop_control:
     label: "{{ item.name }}"
   when:
     - item.inventory != None
     - item.project != None
+
+- name: Grant access to specific teams
+  awx.awx.role:
+
+    # AWX connection & authentication
+    controller_config_file: "{{ awx_config_file | default(omit) }}"
+    controller_host: "{{ awx_url }}"
+    controller_username: "{{ awx_username if awx_token is undefined else omit }}"
+    controller_password: "{{ awx_password if awx_token is undefined else omit }}"
+    controller_oauthtoken: "{{ awx_token | default(omit) }}"
+    validate_certs: "{{ awx_verify_ssl }}"
+
+    team: "{{ item.1.name }}"
+    role: "{{ item.1.role }}"
+    job_templates:
+      - "{{ item.0.name }}"
+    state: "{{ item.1.state | default('present') }}"
+
+  loop: >-
+    {{
+      __awx_job_templates
+      | selectattr('roles', 'defined')
+      | list
+      | subelements('roles')
+      | selectattr('1.type', 'defined')
+      | selectattr('1.type', 'equalto', 'team')
+      | list
+    }}
+  loop_control:
+    label: "{{ item.0.name }} -> {{ item.1.name }}"
+
+- name: Grant access to specific users
+  awx.awx.role:
+
+    # AWX connection & authentication
+    controller_config_file: "{{ awx_config_file | default(omit) }}"
+    controller_host: "{{ awx_url }}"
+    controller_username: "{{ awx_username if awx_token is undefined else omit }}"
+    controller_password: "{{ awx_password if awx_token is undefined else omit }}"
+    controller_oauthtoken: "{{ awx_token | default(omit) }}"
+    validate_certs: "{{ awx_verify_ssl }}"
+
+    user: "{{ item.1.name }}"
+    role: "{{ item.1.role }}"
+    job_templates:
+      - "{{ item.0.name }}"
+    state: "{{ item.1.state | default('present') }}"
+
+  loop: >-
+    {{
+      __awx_job_templates
+      | selectattr('roles', 'defined')
+      | list
+      | subelements('roles')
+      | selectattr('1.type', 'defined')
+      | selectattr('1.type', 'equalto', 'user')
+      | list
+    }}
+  loop_control:
+    label: "{{ item.0.name }} -> {{ item.1.name }}"
