@@ -1,3 +1,16 @@
+# [1.8.0](https://github.com/de-it-krachten/ansible-role-awx_casc/compare/v1.7.0...v1.8.0) (2025-10-08)
+
+
+### Features
+
+* Add role assignments for most resouces ([fbc39dd](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/fbc39ddf938785bc73246c7a566afa9874593712))
+* Add support for AlmaLinux 10 ([43e87a4](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/43e87a418453b0ab1f9ebb5c19f4330272ab52aa))
+* Add support for Debian 13 (Trixie) ([a6ec268](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/a6ec2680ee67e537a72b3d25b20036e0213bfc9f))
+* Add support for OracleLinux 10 ([1fa113f](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/1fa113f2b30467fe14c1c1727a8acf040f8a4de7))
+* Add support for Red Hat Enterprise Linux 10 ([62ab1b5](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/62ab1b5213c827288c07f8fb35fcfeac1cca141c))
+* Add support for RockyLinux 10 ([68947f9](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/68947f94af995fb68c4c53b8948f08b755bc20f8))
+* job_templates - Add jinja2 support for survey & extra-vars ([78adf14](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/78adf14bd535111ac00f9108439a8627fb5aa036))
+
 # [1.8.0](https://github.com/de-it-krachten/ansible-role-awx_casc/compare/v1.7.0...v1.8.0) (2025-08-06)
 
 
