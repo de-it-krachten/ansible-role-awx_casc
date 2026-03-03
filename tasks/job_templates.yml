@@ -4,6 +4,42 @@
   ansible.builtin.set_fact:
     __awx_job_templates: "{{ lookup('file', awx_config_path + '/job_templates/job_templates.yml') | from_yaml }}"
 
+- name: Create extra-vars files
+  ansible.builtin.copy:
+    content: >
+      {%- if item.extra_vars is defined -%}
+      {%- set extra_vars = item.extra_vars -%}
+      {%- else -%}
+      {%- set var_path = '/job_templates/extra_vars/' -%}
+      {%- if awx_vars_format == 'json' -%}
+      {%- set varsfile = awx_config_path + var_path + item.name + '.json' -%}
+      {%- set extra_vars = lookup('file', varsfile, errors='ignore') | default({}, true) -%}
+      {%- elif awx_vars_format == 'yaml' -%}
+      {%- set template = awx_config_path + var_path + item.name + '.yml.j2' -%}
+      {%- set varsfile = awx_config_path + var_path + item.name + '.yml' -%}
+      {%- if template is is_file -%}
+      {%- set extra_vars = lookup('template', template) | from_yaml | default({}, true) -%}
+      {%- else -%}
+      {%- set extra_vars = lookup('file', varsfile, errors='ignore') | from_yaml | default({}, true) -%}
+      {%- endif -%}
+      {%- endif -%}
+      {%- endif -%}
+      {%- if extra_vars == {} -%}
+      ---
+      {%- else -%}
+      {{ extra_vars | to_nice_yaml(indent=2, explicit_start=True) }}
+      {%- endif -%}
+    dest: "/tmp/jt-{{ item.name }}.yml"
+  changed_when: false
+  ignore_errors: "{{ awx_ignore_errors | default(False) }}"  # noqa ignore-errors
+  delegate_to: localhost
+  loop: "{{ __awx_job_templates }}"
+  loop_control:
+    label: "{{ item.name }}"
+  when:
+    - item.inventory != None
+    - item.project != None
+
 - name: Create AWX job_template  # noqa jinja[spacing]
   awx.awx.job_template:
 
@@ -48,24 +84,6 @@
     description: "{{ item.description | default(omit) }}"
     diff_mode: "{{ item.diff_mode | default(omit) }}"
     execution_environment: "{{ item.execution_environment | default(omit) }}"
-    extra_vars: >-
-      {%- if item.extra_vars is defined -%}
-        {{ item.extra_vars }}
-      {%- else -%}
-        {%- set var_path = '/job_templates/extra_vars/' -%}
-        {%- if awx_vars_format == 'json' -%}
-          {%- set varsfile = awx_config_path + var_path + item.name + '.json' -%}
-          {{ lookup('file', varsfile, errors='ignore') | default({}, true) }}
-        {%- elif awx_vars_format == 'yaml' -%}
-          {%- set template = awx_config_path + var_path + item.name + '.yml.j2' -%}
-          {%- set varsfile = awx_config_path + var_path + item.name + '.yml' -%}
-          {%- if template is is_file -%}
-            {{ lookup('template', template) | from_yaml | default(omit, true) }}
-          {%- else -%}
-            {{ lookup('file', varsfile, errors='ignore') | from_yaml | default(omit, true) }}
-          {%- endif -%}
-        {%- endif -%}
-      {%- endif -%}
     force_handlers: "{{ item.force_handlers | default(omit) }}"
     forks: "{{ item.forks | default(omit) }}"
     host_config_key: "{{ item.host_config_key | default(omit) }}"
@@ -110,6 +128,7 @@
     webhook_credential: "{{ item.webhook_credential | default(omit) }}"
     webhook_service: "{{ item.webhook_service | default(omit) }}"
 
+  register: __job_templates
   ignore_errors: "{{ awx_ignore_errors | default(False) }}"  # noqa ignore-errors
   loop: "{{ __awx_job_templates }}"
   loop_control:
@@ -117,6 +136,42 @@
   when:
     - item.inventory != None
     - item.project != None
+
+- name: Add extra vars in the requested format
+  ansible.builtin.uri:
+    url: "{{ awx_url }}/api/v2/job_templates/{{ item.id }}/"
+    method: PATCH
+    headers:
+      Authorization: "Bearer {{ awx_token }}"
+      Content-Type: "application/json"
+    body_format: json
+    body:
+      extra_vars: >-
+        {%- if awx_template_format == 'yaml' -%}
+        {{ lookup('file','/tmp/jt-' + item.item.name + '.yml') }}
+        {%- else -%}
+        {{ lookup('file','/tmp/jt-' + item.item.name + '.yml') | from_yaml }}
+        {%- endif -%}
+  ignore_errors: "{{ awx_ignore_errors | default(False) }}"  # noqa ignore-errors
+  loop: "{{ __job_templates.results }}"
+  loop_control:
+    label: "{{ item.item.name }}"
+  when:
+    - item.item.state | default('present') == 'present'
+    - item.item.inventory != None
+    - item.item.project != None
+
+- name: Delete extra vars files
+  ansible.builtin.file:
+    path: "{{ extra_vars_file }}"
+    state: absent
+  changed_when: false
+  delegate_to: localhost
+  vars:
+    extra_vars_file: "{{ '/tmp/jt-' + item.item.name + '.yml' }}"
+  loop: "{{ __job_templates.results }}"
+  loop_control:
+    label: "{{ extra_vars_file }}"
 
 - name: Grant access to specific teams
   awx.awx.role:

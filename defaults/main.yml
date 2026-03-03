@@ -46,9 +46,10 @@ awx_casc_skip_hosts: false
 # Forcingly recreate workflow templates
 awx_workflow_job_template_recreate: false
 
-# Format for variables & input files
+# Format for variables & input files and extra vars of job templates
 awx_vars_format: json
 awx_inputs_format: json
+awx_template_format: yaml
 
 # List of resources to export
 awx_casc_resources:
