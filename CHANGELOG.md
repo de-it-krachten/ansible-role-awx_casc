@@ -1,3 +1,21 @@
+# [1.9.0](https://github.com/de-it-krachten/ansible-role-awx_casc/compare/v1.8.0...v1.9.0) (2026-03-05)
+
+
+### Bug Fixes
+
+* Implement tokens using awx.awx.token ([1a3e0f2](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/1a3e0f298df50a3f54fa54c8ec85f0d9da697f36))
+
+
+### Features
+
+* Add support for job template extra-vars in YAML ([ca27005](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/ca27005c424aa318140dba92b1fd63c54be621ee))
+* Added support for Fedora 43 ([952bfad](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/952bfad8e0e9bba544699915f4c6f3768507e413))
+* Added support for openSUSE Leap 15 ([10c7544](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/10c7544719ece3a1bc58d9372d27fed5bedc70f0))
+* Added support for openSUSE Leap 16 ([b5594db](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/b5594dbb99cea918c58eb9159e57b3bfb7c438c0))
+* Added support for SUSE Linux Enterprise 15 ([d15e876](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/d15e876902dcebe36a57434966e416c49e0011e0))
+* Added support for SUSE Linux Enterprise 16 ([805706d](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/805706d9360bb921d32a8f634a0a39d97b900209))
+* Removed support for Debian 10 (Buster) ([ec5926e](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/ec5926efbb4ef0094a1c9855bed00b74fa044409))
+
 # [1.8.0](https://github.com/de-it-krachten/ansible-role-awx_casc/compare/v1.7.0...v1.8.0) (2025-10-08)
 
 
