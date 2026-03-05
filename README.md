@@ -31,7 +31,10 @@ Supported platforms
 - AlmaLinux 8<sup>1</sup>
 - AlmaLinux 9<sup>1</sup>
 - AlmaLinux 10<sup>1</sup>
-- Debian 10 (Buster)<sup>1</sup>
+- SUSE Linux Enterprise 15<sup>1</sup>
+- SUSE Linux Enterprise 16<sup>1</sup>
+- openSUSE Leap 15
+- openSUSE Leap 16
 - Debian 11 (Bullseye)<sup>1</sup>
 - Debian 12 (Bookworm)<sup>1</sup>
 - Debian 13 (Trixie)<sup>1</sup>
@@ -39,9 +42,11 @@ Supported platforms
 - Ubuntu 22.04 LTS<sup>1</sup>
 - Ubuntu 24.04 LTS<sup>1</sup>
 - Fedora 42<sup>1</sup>
+- Fedora 43<sup>1</sup>
 
 Note:
 <sup>1</sup> : no automated testing is performed on these platforms
+
 
 ## Role Variables
 ### defaults/main.yml
@@ -92,9 +97,10 @@ awx_casc_skip_hosts: false
 # Forcingly recreate workflow templates
 awx_workflow_job_template_recreate: false
 
-# Format for variables & input files
+# Format for variables & input files and extra vars of job templates
 awx_vars_format: json
 awx_inputs_format: json
+awx_template_format: yaml
 
 # List of resources to export
 awx_casc_resources:
