@@ -13,6 +13,8 @@
     scope: "write"
     state: present
 
+  changed_when: false
+
 - name: Save token
   ansible.builtin.set_fact:
     awx_token: "{{ controller_token.token }}"
