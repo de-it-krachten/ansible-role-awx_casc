@@ -139,6 +139,7 @@ awx_casc_resources:
   hosts: all
   become: 'no'
   vars:
+    molecule_driver: '{{ lookup(''env'', ''MOLECULE_DRIVER_NAME'') }}'
     awx_command: /usr/local/bin/awx
     awx_config_path: /tmp/awx-config
   tasks:
