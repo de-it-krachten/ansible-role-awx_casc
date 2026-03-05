@@ -153,6 +153,7 @@
         {%- else -%}
         {{ lookup('file','/tmp/jt-' + item.item.name + '.yml') | from_yaml }}
         {%- endif -%}
+    validate_certs: "{{ awx_verify_ssl }}"
   ignore_errors: "{{ awx_ignore_errors | default(False) }}"  # noqa ignore-errors
   loop: "{{ __job_templates.results }}"
   loop_control:
