@@ -4,7 +4,7 @@
   ansible.builtin.set_fact:
     __awx_job_templates: "{{ lookup('file', awx_config_path + '/job_templates/job_templates.yml') | from_yaml }}"
 
-- name: Create extra-vars files
+- name: Create extra-vars files  # noqa jinja[spacing]
   ansible.builtin.copy:
     content: >
       {%- if item.extra_vars is defined -%}
@@ -30,6 +30,7 @@
       {{ extra_vars | to_nice_yaml(indent=2, explicit_start=True) }}
       {%- endif -%}
     dest: "/tmp/jt-{{ item.name }}.yml"
+    mode: "0640"
   changed_when: false
   ignore_errors: "{{ awx_ignore_errors | default(False) }}"  # noqa ignore-errors
   delegate_to: localhost
@@ -137,7 +138,7 @@
     - item.inventory != None
     - item.project != None
 
-- name: Add extra vars in the requested format
+- name: Add extra vars in the requested format  # noqa jinja[spacing]
   ansible.builtin.uri:
     url: "{{ awx_url }}/api/v2/job_templates/{{ item.id }}/"
     method: PATCH
