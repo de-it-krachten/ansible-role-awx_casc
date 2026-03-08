@@ -34,6 +34,8 @@
     name: "{{ item.key }}"
     value: >-
       {{ item.value | regex_replace('slmgtams(1038|1080)', 'awx') }}
+  vars:
+    ansible_python_interpreter: "{{ awx_venv_root }}/bin/python3"
   when:
     - item.key in keys_required
     - item.key in keys_present

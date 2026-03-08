@@ -13,7 +13,7 @@ Import AWX configuration using Configuration-as-Code
 None
 
 #### Collections
-- {'name': 'awx.awx'}
+- awx.awx
 
 ## Platforms
 
@@ -136,8 +136,10 @@ awx_casc_resources:
   become: 'no'
   vars:
     molecule_driver: '{{ lookup(''env'', ''MOLECULE_DRIVER_NAME'') }}'
+    awx_venv_root: /usr/local/venv/awxkit
     awx_command: /usr/local/bin/awx
     awx_config_path: /tmp/awx-config
+    awx_password: Admin123!
   tasks:
     - name: Include role 'awx_casc'
       ansible.builtin.include_role:

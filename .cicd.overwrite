@@ -67,6 +67,7 @@ molecule:
     pre: converge-pre.yml
     become: "no"
     vars:
+      awx_venv_root: /usr/local/venv/awxkit
       awx_command: /usr/local/bin/awx
       awx_config_path: /tmp/awx-config
-
+      awx_password: 'Admin123!'

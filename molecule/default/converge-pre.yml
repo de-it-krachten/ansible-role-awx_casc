@@ -1,20 +1,10 @@
 ---
 
-- hosts: all
-  roles:
-    - deitkrachten.python
-  tasks:
-    - name: Install awxkit
-      pip:
-        name: awxkit
-        version: 15.0.1
-      become: yes
-      tags: molecule-idempotence-notest
-
 - hosts: localhost
   vars:
     awx_config_path: /tmp/awx-config
   tasks:
+
     - name: Create export directory
       file:
         path: "{{ awx_config_path }}"
@@ -26,3 +16,85 @@
         src: tests/awx/
         dest: "{{ awx_config_path }}"
         remote_src: yes
+
+- hosts: all
+  vars:
+    olam_hostname: olam.local
+  tasks:
+
+    - name: Configure cluster id via /etc/hosts
+      ansible.builtin.shell: |
+        sed -i "/{{ olam_hostname }}/d" /etc/hosts
+        echo "{{ ansible_default_ipv4['address'] }} {{ olam_hostname }}" >> /etc/hosts
+      become: yes
+      tags: molecule-idempotence-notest
+
+    - name: Create required directories
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        owner: awx
+        group: awx
+        mode: "0755"
+      loop:
+        - /var/lib/ol-automation-manager/.config
+        - /var/lib/ol-automation-manager/.config/containers
+
+    - name: Configure the correct mount_program
+      ansible.builtin.copy:
+        content: |
+          [storage]
+          driver = "overlay"
+
+          [storage.options]
+          mount_program = "/usr/bin/fuse-overlayfs"
+        dest: /var/lib/ol-automation-manager/.config/containers/storage.conf
+        owner: awx
+        group: awx
+        mode: "0644"
+
+    - name: Ensure / is a shared mount
+      ansible.posix.mount:
+        path: /
+        src: overlay
+        fstype: auto
+        opts: "remount,shared"
+        state: mounted
+      become: yes
+
+    - name: Check capabilties
+      ansible.builtin.command:
+        cmd: setcap -v {{ item.cap }} {{ item.file }}
+      become: yes
+      register: __cap
+      changed_when: false
+      failed_when: false
+      loop:
+        - file: /usr/bin/newuidmap
+          cap: cap_setuid+ep
+        - file: /usr/bin/newgidmap
+          cap: cap_setgid+ep
+
+    - name: Set capabilities
+      ansible.builtin.command:
+        cmd: setcap {{ item.item.cap }} {{ item.item.file }}
+      become: yes
+      changed_when: true
+      when: item.stdout is search('differs in')
+      loop: "{{ __cap.results }}"
+      loop_control:
+        label: "{{ item.item.cap }} {{ item.item.file }}"
+
+    - name: Stop the receptor
+      ansible.builtin.command:
+        cmd: pkill --echo receptor
+      register: __receptor
+      changed_when: "'receptor killed' in __receptor.stdout"
+      failed_when: __receptor.rc > 1
+      tags: molecule-idempotence-notest
+
+    - name: Restart OLAM
+      ansible.builtin.service:
+        name: ol-automation-manager
+        state: restarted
+      tags: molecule-idempotence-notest
