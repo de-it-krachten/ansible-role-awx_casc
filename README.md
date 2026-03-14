@@ -25,7 +25,7 @@ Supported platforms
 - RockyLinux 8<sup>1</sup>
 - RockyLinux 9<sup>1</sup>
 - RockyLinux 10<sup>1</sup>
-- OracleLinux 8
+- OracleLinux 8<sup>1</sup>
 - OracleLinux 9<sup>1</sup>
 - OracleLinux 10<sup>1</sup>
 - AlmaLinux 8<sup>1</sup>
