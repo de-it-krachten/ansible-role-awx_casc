@@ -25,16 +25,12 @@ Supported platforms
 - RockyLinux 8<sup>1</sup>
 - RockyLinux 9<sup>1</sup>
 - RockyLinux 10<sup>1</sup>
-- OracleLinux 8
+- OracleLinux 8<sup>1</sup>
 - OracleLinux 9<sup>1</sup>
 - OracleLinux 10<sup>1</sup>
 - AlmaLinux 8<sup>1</sup>
 - AlmaLinux 9<sup>1</sup>
 - AlmaLinux 10<sup>1</sup>
-- SUSE Linux Enterprise 15<sup>1</sup>
-- SUSE Linux Enterprise 16<sup>1</sup>
-- openSUSE Leap 15
-- openSUSE Leap 16
 - Debian 11 (Bullseye)<sup>1</sup>
 - Debian 12 (Bookworm)<sup>1</sup>
 - Debian 13 (Trixie)<sup>1</sup>
@@ -140,8 +136,10 @@ awx_casc_resources:
   become: 'no'
   vars:
     molecule_driver: '{{ lookup(''env'', ''MOLECULE_DRIVER_NAME'') }}'
+    awx_venv_root: /usr/local/venv/awxkit
     awx_command: /usr/local/bin/awx
     awx_config_path: /tmp/awx-config
+    awx_password: Admin123!
   tasks:
     - name: Include role 'awx_casc'
       ansible.builtin.include_role:

@@ -19,12 +19,18 @@ platforms:
   rockylinux10:
     supported: true
     ci: false
+  oraclelinux8:
+    supported: true
+    ci: false
   oraclelinux9:
     supported: true
     ci: false
   oraclelinux10:
     supported: true
     ci: false
+  olam8:
+    supported: false
+    ci: true
   almalinux8:
     supported: true
     ci: false
@@ -67,6 +73,7 @@ molecule:
     pre: converge-pre.yml
     become: "no"
     vars:
+      awx_venv_root: /usr/local/venv/awxkit
       awx_command: /usr/local/bin/awx
       awx_config_path: /tmp/awx-config
-
+      awx_password: 'Admin123!'
