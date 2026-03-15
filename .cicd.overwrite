@@ -65,10 +65,21 @@ platforms:
     supported: true
     ci: false
 
+# Dependencies
+dependencies:
+  roles:
+    - deitkrachten.awx_cli
+  collections:
+    - awx.awx
+
+# Molecule
 molecule:
   requirements:
     roles_extra:
-      - deitkrachten.python
+      - deitkrachten.awx_cli
+  prepare:
+    vars:
+      activate_epel: true
   converge:
     pre: converge-pre.yml
     become: "no"

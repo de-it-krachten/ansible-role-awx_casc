@@ -10,7 +10,7 @@ Import AWX configuration using Configuration-as-Code
 ## Dependencies
 
 #### Roles
-None
+- deitkrachten.awx_cli
 
 #### Collections
 - awx.awx
