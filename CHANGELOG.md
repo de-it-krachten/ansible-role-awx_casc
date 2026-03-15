@@ -1,3 +1,13 @@
+# [1.10.0](https://github.com/de-it-krachten/ansible-role-awx_casc/compare/v1.9.0...v1.10.0) (2026-03-15)
+
+
+### Features
+
+* Drop support for openSUSE Leap 15 ([94eec26](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/94eec26a28e3a36af6bb54418f69ca06df28477f))
+* Drop support for openSUSE Leap 16 ([ed5db3c](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/ed5db3c332209ff280b1e875af8bf79e782973e8))
+* Drop support for SUSE Linux Enterprise 15 ([1593aef](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/1593aefce6d2733af8549f3737d54823c7c8a30e))
+* Drop support for SUSE Linux Enterprise 16 ([171711e](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/171711ecf60dd660bd9f52009c6dd2f6edf495ce))
+
 # [1.9.0](https://github.com/de-it-krachten/ansible-role-awx_casc/compare/v1.8.0...v1.9.0) (2026-03-05)
 
 
