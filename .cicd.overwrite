@@ -5,7 +5,7 @@ generic:
   role: ansible-role-awx_casc
   role_short: awx_casc
   role_description: |
-    Import AWX configuration using Configuration-as-Code 
+    Import AWX configuration using Configuration-as-Code
   collections: []
 
 # Supported platforms
@@ -56,6 +56,9 @@ platforms:
     supported: true
     ci: false
   ubuntu2404:
+    supported: true
+    ci: false
+  ubuntu2604:
     supported: true
     ci: false
   fedora42:
