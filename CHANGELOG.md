@@ -1,3 +1,13 @@
+# [1.11.0](https://github.com/de-it-krachten/ansible-role-awx_casc/compare/v1.10.0...v1.11.0) (2026-04-17)
+
+
+### Features
+
+* Add support for scheduling job templates ([8056de2](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/8056de2206fe90fcdae648c31509d76148e4d479))
+* Add support for scheduling project updates ([f0aa42f](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/f0aa42f2b1113e9bf23758ab1f7a466043e892d2))
+* Add support for scheduling workflow templates ([f404522](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/f4045224fee05a86265511051630256cff54c556))
+* Add support for Ubuntu 26.04 LTS ([94ef866](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/94ef8669b086748d4bb65c9e1d0f9701f359d3e6))
+
 # [1.10.0](https://github.com/de-it-krachten/ansible-role-awx_casc/compare/v1.9.0...v1.10.0) (2026-03-15)
 
 
