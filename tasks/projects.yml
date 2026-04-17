@@ -52,6 +52,33 @@
   loop_control:
     label: "{{ item.name }}"
 
+- name: Setup project update scheduling
+  awx.awx.schedule:
+
+    # AWX connection & authentication
+    controller_config_file: "{{ awx_config_file | default(omit) }}"
+    controller_host: "{{ awx_url }}"
+    controller_username: "{{ awx_username if awx_token is undefined else omit }}"
+    controller_password: "{{ awx_password if awx_token is undefined else omit }}"
+    controller_oauthtoken: "{{ awx_token | default(omit) }}"
+    validate_certs: "{{ awx_verify_ssl }}"
+
+    # Required parameters
+    name: "{{ item.name }}"
+
+    # Optional parameters
+    description: "{{ item.description | default(omit) }}"
+    rrule: "{{ item.rrule }}"
+    unified_job_template: "{{ item.name }}"
+
+  ignore_errors: "{{ awx_ignore_errors | default(False) }}"  # noqa ignore-errors
+  loop: "{{ __awx_projects }}"
+  loop_control:
+    label: "{{ item.name }}"
+  when:
+    - item.schedule | default(false) | bool
+    - item.rrule is defined and item.rrule | length > 0
+
 - name: Force project update
   awx.awx.project_update:
     # AWX connection & authentication

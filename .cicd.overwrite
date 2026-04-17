@@ -5,7 +5,7 @@ generic:
   role: ansible-role-awx_casc
   role_short: awx_casc
   role_description: |
-    Import AWX configuration using Configuration-as-Code 
+    Import AWX configuration using Configuration-as-Code
   collections: []
 
 # Supported platforms
@@ -58,6 +58,9 @@ platforms:
   ubuntu2404:
     supported: true
     ci: false
+  ubuntu2604:
+    supported: true
+    ci: false
   fedora42:
     supported: true
     ci: false
@@ -65,9 +68,18 @@ platforms:
     supported: true
     ci: false
 
+# Dependencies
+dependencies:
+  roles:
+    - deitkrachten.awx_cli
+  collections:
+    - awx.awx
+
+# Molecule
 molecule:
   requirements:
-    roles_extra: []
+    roles_extra:
+      - deitkrachten.awx_cli
   prepare:
     vars:
       activate_epel: true

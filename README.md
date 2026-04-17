@@ -3,14 +3,14 @@
 
 # ansible-role-awx_casc
 
-Import AWX configuration using Configuration-as-Code 
+Import AWX configuration using Configuration-as-Code
 
 
 
 ## Dependencies
 
 #### Roles
-None
+- deitkrachten.awx_cli
 
 #### Collections
 - awx.awx
@@ -37,6 +37,7 @@ Supported platforms
 - Ubuntu 20.04 LTS<sup>1</sup>
 - Ubuntu 22.04 LTS<sup>1</sup>
 - Ubuntu 24.04 LTS<sup>1</sup>
+- Ubuntu 26.04 LTS<sup>1</sup>
 - Fedora 42<sup>1</sup>
 - Fedora 43<sup>1</sup>
 
