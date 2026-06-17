@@ -2,44 +2,12 @@
 
 - name: Load job templates from file
   ansible.builtin.set_fact:
+    awx_resource: job_templates
     __awx_job_templates: "{{ lookup('file', awx_config_path + '/job_templates/job_templates.yml') | from_yaml }}"
 
-- name: Create extra-vars files  # noqa jinja[spacing]
-  ansible.builtin.copy:
-    content: >
-      {%- if item.extra_vars is defined -%}
-      {%- set extra_vars = item.extra_vars -%}
-      {%- else -%}
-      {%- set var_path = '/job_templates/extra_vars/' -%}
-      {%- if awx_vars_format == 'json' -%}
-      {%- set varsfile = awx_config_path + var_path + item.name + '.json' -%}
-      {%- set extra_vars = lookup('file', varsfile, errors='ignore') | default({}, true) -%}
-      {%- elif awx_vars_format == 'yaml' -%}
-      {%- set template = awx_config_path + var_path + item.name + '.yml.j2' -%}
-      {%- set varsfile = awx_config_path + var_path + item.name + '.yml' -%}
-      {%- if template is is_file -%}
-      {%- set extra_vars = lookup('template', template) | from_yaml | default({}, true) -%}
-      {%- else -%}
-      {%- set extra_vars = lookup('file', varsfile, errors='ignore') | from_yaml | default({}, true) -%}
-      {%- endif -%}
-      {%- endif -%}
-      {%- endif -%}
-      {%- if extra_vars == {} -%}
-      ---
-      {%- else -%}
-      {{ extra_vars | to_nice_yaml(indent=2, explicit_start=True) }}
-      {%- endif -%}
-    dest: "/tmp/jt-{{ item.name }}.yml"
-    mode: "0640"
-  changed_when: false
-  ignore_errors: "{{ awx_ignore_errors | default(False) }}"  # noqa ignore-errors
-  delegate_to: localhost
-  loop: "{{ __awx_job_templates }}"
-  loop_control:
-    label: "{{ item.name }}"
-  when:
-    - item.inventory != None
-    - item.project != None
+- name: Create extra-vars
+  ansible.builtin.include_tasks:
+    file: extra-vars.yml
 
 - name: Create AWX job_template  # noqa jinja[spacing]
   awx.awx.job_template:
@@ -85,6 +53,7 @@
     description: "{{ item.description | default(omit) }}"
     diff_mode: "{{ item.diff_mode | default(omit) }}"
     execution_environment: "{{ item.execution_environment | default(omit) }}"
+    # extra_vars: "{{ lookup('file', '/tmp/ev-' + item.name + '.yml') | from_yaml }}"
     force_handlers: "{{ item.force_handlers | default(omit) }}"
     forks: "{{ item.forks | default(omit) }}"
     host_config_key: "{{ item.host_config_key | default(omit) }}"
@@ -149,9 +118,9 @@
     body:
       extra_vars: >-
         {%- if awx_template_format == 'yaml' -%}
-        {{ lookup('file','/tmp/jt-' + item.item.name + '.yml') }}
+        {{ lookup('file','/tmp/ev-' + item.item.name + '.yml') }}
         {%- else -%}
-        {{ lookup('file','/tmp/jt-' + item.item.name + '.yml') | from_yaml }}
+        {{ lookup('file','/tmp/ev-' + item.item.name + '.yml') | from_yaml }}
         {%- endif -%}
     validate_certs: "{{ awx_verify_ssl }}"
   ignore_errors: "{{ awx_ignore_errors | default(False) }}"  # noqa ignore-errors
@@ -170,7 +139,7 @@
   changed_when: false
   delegate_to: localhost
   vars:
-    extra_vars_file: "{{ '/tmp/jt-' + item.item.name + '.yml' }}"
+    extra_vars_file: "{{ '/tmp/ev-' + item.item.name + '.yml' }}"
   loop: "{{ __job_templates.results }}"
   loop_control:
     label: "{{ extra_vars_file }}"
