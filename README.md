@@ -99,6 +99,14 @@ awx_vars_format: json
 awx_inputs_format: json
 awx_template_format: yaml
 
+# Extra-vars jinja variable, block and comment pointers
+# awx_casc_template_variable_start_string: "<="
+# awx_casc_template_variable_end_string: "=>"
+# awx_casc_template_block_start_string: "<%"
+# awx_casc_template_block_end_string: "%>"
+# awx_casc_template_comment_start_string: "<#"
+# awx_casc_template_comment_end_string: "#>"
+
 # List of resources to export
 awx_casc_resources:
   - settings
