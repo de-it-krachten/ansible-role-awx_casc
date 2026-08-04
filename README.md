@@ -38,8 +38,8 @@ Supported platforms
 - Ubuntu 22.04 LTS<sup>1</sup>
 - Ubuntu 24.04 LTS<sup>1</sup>
 - Ubuntu 26.04 LTS<sup>1</sup>
-- Fedora 42<sup>1</sup>
 - Fedora 43<sup>1</sup>
+- Fedora 44<sup>1</sup>
 
 Note:
 <sup>1</sup> : no automated testing is performed on these platforms
@@ -98,6 +98,14 @@ awx_workflow_job_template_recreate: false
 awx_vars_format: json
 awx_inputs_format: json
 awx_template_format: yaml
+
+# Extra-vars jinja variable, block and comment pointers
+# awx_casc_template_variable_start_string: "<="
+# awx_casc_template_variable_end_string: "=>"
+# awx_casc_template_block_start_string: "<%"
+# awx_casc_template_block_end_string: "%>"
+# awx_casc_template_comment_start_string: "<#"
+# awx_casc_template_comment_end_string: "#>"
 
 # List of resources to export
 awx_casc_resources:

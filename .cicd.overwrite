@@ -61,10 +61,10 @@ platforms:
   ubuntu2604:
     supported: true
     ci: false
-  fedora42:
+  fedora43:
     supported: true
     ci: false
-  fedora43:
+  fedora44:
     supported: true
     ci: false
 
@@ -77,6 +77,7 @@ dependencies:
 
 # Molecule
 molecule:
+  phase1: []
   requirements:
     roles_extra:
       - deitkrachten.awx_cli
