@@ -1,3 +1,18 @@
+# [1.12.0](https://github.com/de-it-krachten/ansible-role-awx_casc/compare/v1.11.0...v1.12.0) (2026-08-04)
+
+
+### Bug Fixes
+
+* Fix deprecation warnings ([fde657d](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/fde657ddec290ae3a1ae5267a1264d458f4c9b49))
+* fixed awx_resource variable ([41d71d7](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/41d71d75a849016ba46156311525966405ad688d))
+* Make it possible to use alternative jinja tags ([81b353d](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/81b353d392c8777e88709dc63b4d6ad2a2d3c960))
+
+
+### Features
+
+* Added support for Fedora 44 ([7826c85](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/7826c85f64f877771bf3b37863f48457a15501c1))
+* Drop support for Fedora 42 ([4681437](https://github.com/de-it-krachten/ansible-role-awx_casc/commit/4681437e80c64e16e1d71ee7b1a824f5e07ff100))
+
 # [1.11.0](https://github.com/de-it-krachten/ansible-role-awx_casc/compare/v1.10.0...v1.11.0) (2026-04-17)
 
 
